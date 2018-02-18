@@ -1,7 +1,8 @@
+# m_c5 --------------------------------------------------------------------
 tt=Sys.time()
 # 设定d_pk数据框
 d_pk=data.frame(name=rep(c('A','K','Q','J','T',9:2),each=4),face=rep(1:13,each=4),
-                   suit=rep(c(1,5,25,125),13))
+                   suit=rep(c(1,5,25,125),13),stringsAsFactors=F)
 
 m_c5=combn(1:52,5)# 设定扑克牌排列矩阵
 m_c5_face=matrix(data=d_pk$face[m_c5],ncol=5,byrow=T)# 设定扑克牌face排列矩阵
@@ -70,49 +71,6 @@ m_c5=cbind(t(m_c5),m_c5_type_rank)
 Sys.time()-tt
 
 
-# m_c5lite ----------------------------------------------------------------
-m_1459=t(combn(1:13,5))
-m_1459_id=cumsum(table(m_1459[,1]))
-v_15=c(c(0,m_1459_id[-9])+1,m_1459_id[1])
-v_49=(1:choose(13,5))[-v_15]
-m_1=cbind(m_1459[v_15,],1,1:10,4)
-m_4=cbind(m_1459[v_49,],4,1:1277+322,4)
-m_5=cbind(m_1459[v_15,],5,1:10+1599,1020)
-m_9=cbind(m_1459[v_49,],9,1:1277+6185,1020)
-
-i=vector('integer',156*2);j=0
-for(k in 1:13)
-  for(l in (1:13)[-k]){i[j+1:2]=c(k,l);j=j+2}
-
-m_2=matrix(i,156,2,byrow=T)
-m_3=cbind(m_2[,c(rep(1,3),2,2)],3,1:156+166,24)
-m_2=cbind(m_2[,c(rep(1,4),2)],2,1:156+10,4)
-
-i=vector('integer',858*3);j=0
-for(k in 1:12)
-  for(l in (k+1):13)
-    for(m in (1:13)[-c(k,l)]){i[j+1:3]=c(k,l,m);j=j+3}
-
-m_7=matrix(i,858,3,byrow=T)
-m_6=m_7[order(m_7[,3],m_7[,1],m_7[,2]),c(3,1,2)]
-m_6=cbind(m_6[,c(rep(1,3),2,3)],6,1:858+1609,64)
-m_7=cbind(m_7[,c(rep(1:2,each=2),3)],7,1:858+2467,144)
-
-i=vector('integer',2860*4);j=0
-for(k in 1:11)
-  for(l in (k+1):12)
-    for(m in (l+1):13)
-      for(n in (1:13)[-c(k,l,m)]){i[j+1:4]=c(k,l,m,n);j=j+4}
-m_8=matrix(i,2860,4,byrow=T)
-m_8=cbind(m_8[order(m_8[,4],m_8[,1],m_8[,2],m_8[,3]),c(4,4,1:3)],8,1:2860+3325,384)
-
-# 每一种组合未排序
-m_c5lite=do.call(rbind,mget(paste('m_',1:9,sep='')))
-colnames(m_c5lite)=c(paste('c5_',1:5,sep=''),'type','rank','rank_cnt')
-
-# 对每一种组合进行排序
-m_c5lite[,1:5]=t(apply(m_c5lite[,1:5],1,sort))
-
 
 # d_c5stat ----------------------------------------------------------------
 d_c5stat=data.frame(cnt=c(4*10,
@@ -129,9 +87,79 @@ rownames(d_c5stat)=c('sflush','four','fhouse','flush','straight',
 d_c5stat$cnt_cum=cumsum(d_c5stat$cnt)
 d_c5stat$pct=round(d_c5stat$cnt*100/sum(d_c5stat$cnt),4)
 d_c5stat$pct_cum=round(d_c5stat$cnt_cum*100/sum(d_c5stat$cnt),4)
-d_c5stat$ranks=as.vector(table(m_c5lite[,'type']))
-d_c5stat$rank_cnt=as.vector(tapply(m_c5lite[,'rank_cnt'],m_c5lite[,'type'],unique))
+d_c5stat$ranks=c(10,156,156,1277,10,858,858,2860,1277)
+d_c5stat$rank_cnt=c(4,4,24,4,1020,64,144,384,1020)
 d_c5stat$ranks_cum=cumsum(d_c5stat$ranks)
 
-rm(list=ls()[-c(1,2,19,23)])
+rm(list=ls()[-c(1:3)])
+
+
+# m_c2sam ----------------------------------------------------------------
+# 13种对子，78种同花，78种杂花
+c2_pair=cbind(seq(1,by=4,length.out=13),seq(1,by=4,length.out=13)+1)
+c2_suit=t(combn(seq(1,by=4,length.out=13),2))
+
+c2_offs=matrix(nr=0,nc=2)
+n=0
+for(i in seq(1,by=4,length.out=12)){
+  c2_offs=rbind(c2_offs,cbind(i,seq(6+n*4,by=4,length.out=12-n)))
+  n=n+1
+}
+m_c2sam=rbind(c2_pair,c2_suit,c2_offs)
+
+
+m_c2sam=cbind(m_c2sam,rep(c(6,4,12),c(13,78,78)),0,0,0,0,0,0,0,0)
+m_c2sam[1:13,4]=1
+m_c2sam[14:91,5]=1
+m_c2sam[92:169,6]=1
+i=m_c2sam[,2]-m_c2sam[,1]
+m_c2sam[i==4|i==5,7]=1
+m_c2sam[i==8|i==9,8]=1
+m_c2sam[i==12|i==13,9]=1
+m_c2sam[i==16|i==17,10]=1
+m_c2sam[,11]=(m_c2sam[,5]&(m_c2sam[,7]|m_c2sam[,8]|
+                             m_c2sam[,9]|m_c2sam[,10]))
+
+colnames(m_c2sam)=c('c2_1','c2_2','type_cnt','pair','suit','offsuit',
+                     'brg','brg1','brg2','brg3','suit_brg')
+rm(c2_pair,c2_suit,c2_offs,i,n)
+
+# d_c2stat ----------------------------------------------------------------
+d_c2stat=data.frame(type_cnt=c(78,6,4*78,12*78,
+                               sum(m_c2sam[,'type_cnt']*m_c2sam[,'brg']),
+                               sum(m_c2sam[,'type_cnt']*m_c2sam[,'brg1']),
+                               sum(m_c2sam[,'type_cnt']*m_c2sam[,'brg2']),
+                               sum(m_c2sam[,'type_cnt']*m_c2sam[,'brg3']),
+                               sum(m_c2sam[,'type_cnt']*m_c2sam[,'suit_brg'])))
+rownames(d_c2stat)=c('pair','pair_1','suit','offsuit','brg','brg1','brg2',
+                     'brg3','suit_brg')
+d_c2stat$pct=round(100*d_c2stat$type_cnt/1326,2)
+d_c2stat$odds=round(1326/d_c2stat$type_cnt,2)
+
+
+# m_c2 --------------------------------------------------------------------
+m_c2=combn(52,2)
+i=d_pk$face[m_c2[2,]]-d_pk$face[m_c2[1,]]
+j=d_pk$suit[m_c2[2,]]-d_pk$suit[m_c2[1,]]
+pair=(i==0)
+suit=(j==0)
+offsuit=xor(!suit,pair)
+brg=(i==1)
+brg1=(i==2)
+brg2=(i==3)
+brg3=(i==4)
+suit_brg=(suit&(brg|brg1|brg2|brg3))
+m_c2=cbind(t(m_c2),pair,suit,offsuit,brg,brg1,brg2,brg3,suit_brg)
+
+rm(i,j,pair,suit,offsuit,brg,brg1,brg2,brg3,suit_brg)
 gc()
+
+# m_c5id ------------------------------------------------------------------
+m_c5id=cbind(c(table(m_c5[,1]),0,0,0,0),
+             c(0,table(m_c5[1:249900,2]),0,0,0),
+             c(0,0,table(m_c5[1:19600,3]),0,0),
+             c(0,0,0,table(m_c5[1:1176,4]),0),
+             c(0,0,0,0,table(m_c5[1:48,5])))
+dimnames(m_c5id)=NULL
+
+

@@ -1,0 +1,88 @@
+---
+title: "使用R的一些技巧记录"
+output: html_notebook
+---
+
+
+1. 循环（尤其是大循环）之前，对待矩阵、数据框等，一定要设定变量并赋值，不然耗时巨大
+```{r}
+d_pk=data.frame(num=1:52)
+j=d_pk$num
+
+system.time(for(i in 1:1000000){
+  j
+})
+
+system.time(for(i in 1:1000000){
+  1:52
+})
+
+system.time(for(i in 1:1000000){
+  d_pk$num
+})
+```
+
+2. 善用order进行乱序查找，威力巨大
+```{r}
+(i=sample(1:10,10))
+(ord=order(i))
+# i[ord]是升序向量，findInterval()用二分查找函数替代，复杂度从n降为log(n)
+(pos=findInterval(2,i[ord]))
+i[pos]
+```
+
+3. do.call()+rbind()的使用，对list进行合并
+```{r}
+for(i in 1:9)
+  assign(paste('i_',i,sep=''),1:10+i)
+do.call(rbind,mget(paste('i_',1:9,sep='')))
+```
+
+4. 利用factor进行查找
+```{r}
+# !!!指定levels和labels的性能提升6-7倍，只指定levels性能提升会稍高, about 11 seconds
+m_c5_in2=factor(m_c2_in5,levels=m_c2[,'prm_prd'],labels=1:1326,ordered=T)
+# !!!m_c5在m_c2中的序号,19600*1326, 利用names映射进行查找，about 13 seconds
+names(m_c5_in2)=rep(1:2598960,10)
+# attributes(m_c5_in2)
+m_c5_in2=matrix(as.integer(names(sort(m_c5_in2))),19600,1326)
+m_c5_in2=apply(m_c5_in2,2,sort)
+```
+
+
+5. 用diff比table快16倍，用sort和diff比table快2倍
+```{r}
+# 13.2秒
+system.time({for(i in 1:100000) table(1:7)})
+
+# 0.8秒
+system.time({for(i in 1:100000) diff(1:7)})
+
+# 4秒
+system.time({for(i in 1:100000) sort(1:7)})
+
+# 0.7秒
+system.time({for(i in 1:100000) unique(1:7)})
+```
+
+
+6. 是否提前赋变量关系不大
+```{r}
+system.time({n=1:100
+for(i in 1:1000000) n=1:100})
+
+
+system.time(for(i in 1:1000000) n=1:100)
+```
+
+
+
+
+
+
+
+
+
+
+
+
