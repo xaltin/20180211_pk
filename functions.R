@@ -18,7 +18,7 @@ seq5in7=function(hand2,board5){
   while(i<=7){# 实现了3个功能1.table 2.length 3.diff
     j=i+1
     while(j<=7 && m[j,4]==m[i,4]) j=j+1
-    ifelse(j==(i+1),(m[i,2]=1),(m[i:(j-1),2]=j-i))
+    if(j==(i+1)) m[i,2]=1 else m[i:(j-1),2]=j-i
     len=len+1; m[len,3]=i; i=j
   }
   
