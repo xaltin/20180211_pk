@@ -1,24 +1,20 @@
 # 1. 己方2张手牌的wp ----------------------------------------------
 v_52=1:52
-N=50000
-# 记录169种起手牌的9种牌型的出现次数，以及胜、平次数，运行169*2*5w=1689w次
+N=100000
+# 记录169种起手牌的9种牌型的出现次数，以及胜、平次数，运行169*2*10w=3380w次
 m_wp_my=matrix(nr=nrow(m_c2sam),nc=11)
 
-tt=Sys.time()# 耗时1.3hours
+tt=Sys.time()
 for(i in 1:nrow(m_c2sam)){
   v_my2=as.vector(m_c2sam[i,1:2])# 己方2张手牌,as.vector取消name
   
   v_wp_my=vector('integer',11)# 记录9种牌型的出现次数，以及胜、平次数
-  
   for(j in 1:N){# for 2
     v_op2=sample(v_52[-v_my2],2)# 对手2张手牌
     v_bd5=sample(v_52[-c(v_my2,v_op2)],5)# 5张公共牌
     
-    v_my5=seq5in7(v_my2,v_bd5)#己方5张成牌
-    v_op5=seq5in7(v_op2,v_bd5)#对方5张成牌
-    
-    rn_my=match_mc5(v_my5)# 返回v_my5的行索引
-    rn_op=match_mc5(v_op5)# 返回v_op5的行索引
+    rn_my=seq5in7(v_my2,v_bd5)# 返回v_my5的行索引
+    rn_op=seq5in7(v_op2,v_bd5)# 返回v_op5的行索引
     
     # 命中某种类型，则某种类型+1
     v_wp_my[m_c5[rn_my,6]]=v_wp_my[m_c5[rn_my,6]]+1
@@ -28,7 +24,6 @@ for(i in 1:nrow(m_c2sam)){
     else if(m_c5[rn_my,7]==m_c5[rn_op,7])
       v_wp_my[11]=v_wp_my[11]+1
   }# for 2
-  
   m_wp_my[i,]=v_wp_my
 }
 Sys.time()-tt
@@ -41,25 +36,37 @@ d_wp_my=data.frame(paste(d_pk$name[m_c2sam[,1]],d_pk$name[m_c2sam[,2]],
 colnames(d_wp_my)=c('name','rflush','four','house','flush','straight',
                     'three','tpair','pair','high','win','equal','lost')
 
-# # 169种起手牌，己方和对手起手牌各运行5w次，耗时1.3hours，进行保存
-# saveRDS(d_wp_my,'data/d_wp_my_169_5w.RData')
-
-
+# # 169种起手牌，己方和对手起手牌各运行10w次，耗时77.7 mins
+# saveRDS(d_wp_my,'data/d_wp_my_169_10w.RData')
+# write.csv(d_wp_my,'data/d_wp_my_169_10w.csv')
 
 
 # 2. 对d_wp_my 进行统计分析-------------------------------------------
 # 加载
-d_wp_my=readRDS('data/d_wp_my_169_5w.RData')
+d_wp_my=readRDS('data/d_wp_my_169_10w.RData')
 
-d_c5stat$tp_5in7_cnt=colSums(d_wp_my[,2:10])
-d_c5stat$tp_5in7_pct=d_c5stat$tp_5in7_cnt*100/(169*N)
-d_c5stat$tp_5in7_odd=round(169*N/d_c5stat$tp_5in7_cnt,2)
+# 1. 13x13 matrix for 2 people's 169's wp
+i=round((d_wp_my$win+d_wp_my$equal/2)*100/N,1)
+
+m_p2_13x13=diag(i[1:13],13,13)
+m_p2_13x13[lower.tri(m_p2_13x13)]=i[14:91]
+m_p2_13x13=t(m_p2_13x13)
+m_p2_13x13[lower.tri(m_p2_13x13)]=i[92:169]
+rownames(m_p2_13x13)=c('A','K','Q','J','T',9:2)
+colnames(m_p2_13x13)=c('A','K','Q','J','T',9:2)
+# write.csv(m_p2_13x13,'data/m_p2_13x13_10w.csv')
+
+# 1. matrix for 169's wp
+d_wp_my_pct=d_wp_my[,2:10]*100/N
+rownames(d_wp_my_pct)=d_wp_my$name
+
+d_wp_my_odd=round(N/d_wp_my[,2:10],2)
+rownames(d_wp_my_odd)=d_wp_my$name
 
 
-
-# 3. 7张牌中各种牌型的出现概率，耗时45.3 mins-------------------------
+# 3. 7张牌中各种牌型的出现概率，100m次，耗时45.3 mins----------------
 v_52=1:52
-N=10000000
+N=100000000
 v_type_5in7=vector('integer',9)
 names(v_type_5in7)=c('rflush','four','house','flush','straight',
                     'three','tpair','pair','high')
@@ -67,27 +74,18 @@ names(v_type_5in7)=c('rflush','four','house','flush','straight',
 tt=Sys.time()
 for(i in 1:N){# for 2
   v_7=sample(v_52,7)# 随机7张牌
-  v_5=seq5in7(v_7[1:2],v_7[3:7])#己方5张成牌
-  rn_5=match_mc5(v_5)
+  rn_5=seq5in7(v_7[1:2],v_7[3:7])#己方5张成牌
   v_type_5in7[m_c5[rn_5,6]]=v_type_5in7[m_c5[rn_5,6]]+1
 }
 Sys.time()-tt
 
-# saveRDS(v_type_5in7,'data/v_type_5in7_1000w.RData')
+# saveRDS(v_type_5in7,'data/v_type_5in7_100m.RData')
 
-v_type_5in7=readRDS('data/v_type_5in7_1000w.RData')
+v_type_5in7=readRDS('data/v_type_5in7_100m.RData')
 
 d_c5stat$tp_5in7_cnt=colSums(d_wp_my[,2:10])
 d_c5stat$tp_5in7_pct=d_c5stat$tp_5in7_cnt*100/(169*N)
 d_c5stat$tp_5in7_odd=round(169*N/d_c5stat$tp_5in7_cnt,2)
-
-
-
-# program test and validation -----------------------------------------
-for(i in 1:nrow(m_c5)){
-  j=m_c5[i,1:5]
-}
-
 
 
 

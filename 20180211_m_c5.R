@@ -163,3 +163,8 @@ m_c5id=cbind(c(table(m_c5[,1]),0,0,0,0),
 dimnames(m_c5id)=NULL
 
 
+# 防止data.frame导致读取性能降低，单独赋值成vector ----------------------------------------
+p_poke=1:52
+p_name=d_pk$name
+p_face=d_pk$face
+p_suit=rep(1:4,13)

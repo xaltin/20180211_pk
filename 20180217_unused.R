@@ -93,6 +93,93 @@ colnames(m_c2lite)=c('c2_1','c2_2','type_cnt','pair','suit','offsuit',
                      'brg','brg1','brg2','brg3','suit_brg')
 rm(brg,brg1,brg2,brg3,i,j)
 
-# unused ------------------------------------------------------------------
+# seq5in7 -----------------------------------------------------------------
+# seq5in7=function(hand2,board5){
+#   cmb=combn(sort(c(hand2,board5)),5)
+#   i=apply(cmb,2,function(x) match_mc5(x))
+#   i[which.min(m_c5[i,7])]
+# }
+
+# seq5in7 这段代码有问题--------------------------------------------------
+# seq5in7=function(hand2,board5){
+#   m_413=matrix(0,4,13)# 13*4矩阵，计算可能的成牌及成牌的牌力
+#   v_7=sort(c(hand2,board5))# 为排序取前5个元素使用sort()
+#   m_413[v_7]=1
+#   
+#   v_sum_c_fc=colSums(m_413)
+#   v_sum_r_st=rowSums(m_413)
+#   v_seq_r_fc=which(v_sum_c_fc!=0)
+#   
+#   v_5=0
+#   if(length(v_seq_r_fc)>=5){# if牌型>=5，判断是否是同花或顺子
+#     i=which(v_sum_r_st>=5)
+#     
+#     if(length(i)==1){# 如果是同花
+#       v_5=v_7[(v_7%%4)==(i%%4)][1:5]
+#     } else {# 是否是顺子
+#       j=diff(v_seq_r_fc)
+#       
+#       if(all(j[1:4]==1)){# if j前四个元素==1
+#         v_5=v_seq_r_fc[1:5]+c(0:3,0)
+#       } else if(length(j)>=5){# if j长度>=5
+#         if(all(j[2:5]==1)) v_5=v_seq_r_fc[2:6]+c(0:3,0)
+#       } else if(length(j)==6){# if j长度==6
+#         if(all(j[3:6]==1)) v_5=v_seq_r_fc[3:7]+c(0:3,0)
+#       } else {# 以上都未命中，if j后四个元素==c(9,1,1,1)
+#         if(all(j[-3:0+length(j)]==c(9,1,1,1)))
+#           v_5=v_seq_r_fc[-4:0+length(v_seq_r_fc)]+c(0:3,0)
+#       }
+#     }
+#   }
+#   
+#   # 这段代码有问题，对于金刚中的4条和对子处理不正确
+#   if(length(v_5)==1){# 既不是同花也不是顺子,v_5未被赋值
+#     k=factor(cut(v_7,seq(0,52,4),labels=1:13),
+#              levels=order(v_sum_c_fc,decreasing=T),ordered=T)
+#     v_5=sort(v_7[order(k)[1:5]])
+#   }
+#   
+#   v_5
+# }
+
+# 功能与combn()相同 ------------------------------------------------------------
+# m_c5_1=matrix(0L,nr=2598960,nc=5)
+# n=1
+# for(i in 1:48)
+#   for(j in (i+1):49)
+#     for(k in (j+1):50)
+#       for(l in (k+1):51)
+#         for(m in (l+1):52){
+#           m_c5_1[n,]=c(i,j,k,l,m)
+#           n=n+1
+#         }
+#           
+# all(m_c5_1==m_c5[,1:5])
+# 
+# 
+# 
+# 
+# write.csv(m_c5[,1:5],'m_c5.csv',row.names=F)
 
 
+# program test and validation -----------------------------------------
+# 1. 验证match_mc5，通过
+j=vector('logical',nrow(m_c5))
+system.time(for(i in 1:nrow(m_c5)){
+  # stopifnot(i==match_mc5(m_c5[i,1:5]))# 32.62 seconds
+  j[i]=(i==match_mc5(m_c5[i,1:5]))# 17.15 seconds
+})
+all(j)
+
+N=10000
+m=matrix(nr=N,nc=7)
+for(i in 1:N)
+  m[i,]=sample(1:52,7)
+
+system.time(for(i in 1:N) # about 1.3s
+  seq5in7(m[i,1:2],m[i,3:7]))
+
+m=t(combn(13,7))
+n=matrix(nr=nrow(m),nc=5)
+for(i in 1:nrow(m))
+  n[i,]=seq5in7(m[i,1:2],m[i,3:7])

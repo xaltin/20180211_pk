@@ -1,124 +1,3 @@
-# seq5in7 -----------------------------------------------------------------
-seq5in7=function(hand2,board5){
-  m_413=matrix(0,4,13)# 13*4矩阵，计算可能的成牌及成牌的牌力
-  v_7=sort(c(hand2,board5))# 为排序取前5个元素使用sort()
-  m_413[v_7]=1
-  
-  v_sum_c_fc=colSums(m_413)
-  v_sum_r_st=rowSums(m_413)
-  v_seq_r_fc=which(v_sum_c_fc!=0)
-  
-  v_5=0
-  if(length(v_seq_r_fc)>=5){# if牌型>=5，判断是否是同花或顺子
-    i=which(v_sum_r_st>=5)
-    
-    if(length(i)==1){# 如果是同花
-      v_5=v_7[(v_7%%4)==(i%%4)][1:5]
-    } else {# 是否是顺子
-      j=diff(v_seq_r_fc)
-      
-      if(all(j[1:4]==1)){# if j前四个元素==1
-        v_5=v_seq_r_fc[1:5]*4-1:5%%4
-      } else if(length(j)>=5){# if j长度>=5
-        if(all(j[2:5]==1)) v_5=v_seq_r_fc[2:6]*4-1:5%%4
-      } else if(length(j)==6){# if j长度==6
-        if(all(j[3:6]==1)) v_5=v_seq_r_fc[3:7]*4-1:5%%4
-      } else {# 以上都未命中，if j后四个元素==c(9,1,1,1)
-        if(all(j[-3:0+length(j)]==c(9,1,1,1)))
-          v_5=v_seq_r_fc[-4:0+length(v_seq_r_fc)]*4-1:5%%4
-      }
-    }
-  }
-  
-  if(length(v_5)==1){# 既不是同花也不是顺子,v_5未被赋值
-    k=factor(cut(v_7,seq(0,52,4),labels=1:13),
-             levels=order(v_sum_c_fc,decreasing=T),ordered=T)
-    v_5=sort(v_7[order(k)[1:5]])
-  }
-  
-  v_5
-}
-
-# seq5in6 -----------------------------------------------------------------
-seq5in6=function(card6){
-  m_413=matrix(0,4,13)# 13*4矩阵，计算可能的成牌及成牌的牌力
-  card6=sort(card6)# 为排序取前5个元素使用sort()
-  m_413[card6]=1
-  
-  v_sum_c_fc=colSums(m_413)
-  v_sum_r_st=rowSums(m_413)
-  v_seq_r_fc=which(v_sum_c_fc!=0)
-  
-  v_5=0
-  if(length(v_seq_r_fc)>=5){# if牌型>=5，判断是否是同花或顺子
-    i=which(v_sum_r_st>=5)
-    
-    if(length(i)==1){# 如果是同花
-      v_5=card6[(card6%%4)==(i%%4)][1:5]
-    } else {# 是否是顺子
-      j=diff(v_seq_r_fc)
-      
-      if(all(j[1:4]==1)){# if j前四个元素==1
-        v_5=v_seq_r_fc[1:5]*4-1:5%%4
-      } else if(length(j)==5){# if j长度>=5
-        if(all(j[2:5]==1)) v_5=v_seq_r_fc[2:6]*4-1:5%%4
-      } else {# 以上都未命中，if j后四个元素==c(9,1,1,1)
-        if(all(j[-3:0+length(j)]==c(9,1,1,1)))
-          v_5=v_seq_r_fc[-4:0+length(v_seq_r_fc)]*4-1:5%%4
-      }
-    }
-  }
-  
-  if(length(v_5)==1){# 既不是同花也不是顺子,v_5未被赋值
-    k=factor(cut(card6,seq(0,52,4),labels=1:13),
-             levels=order(v_sum_c_fc,decreasing=T),ordered=T)
-    v_5=sort(card6[order(k)[1:5]])
-  }
-  
-  v_5
-}
-
-# seq5in5 -----------------------------------------------------------------
-seq5in5=function(hand2,board5){
-  m_413=matrix(0,4,13)# 13*4矩阵，计算可能的成牌及成牌的牌力
-  v_7=sort(c(hand2,board5))# 为排序取前5个元素使用sort()
-  m_413[v_7]=1
-  
-  v_sum_c_fc=colSums(m_413)
-  v_sum_r_st=rowSums(m_413)
-  v_seq_r_fc=which(v_sum_c_fc!=0)
-  
-  v_5=0
-  if(length(v_seq_r_fc)>=5){# if牌型>=5，判断是否是同花或顺子
-    i=which(v_sum_r_st>=5)
-    
-    if(length(i)==1){# 如果是同花
-      v_5=v_7[(v_7%%4)==(i%%4)][1:5]
-    } else {# 是否是顺子
-      j=diff(v_seq_r_fc)
-      
-      if(all(j[1:4]==1)){# if j前四个元素==1
-        v_5=v_seq_r_fc[1:5]*4-1:5%%4
-      } else if(length(j)>=5){# if j长度>=5
-        if(all(j[2:5]==1)) v_5=v_seq_r_fc[2:6]*4-1:5%%4
-      } else if(length(j)==6){# if j长度==6
-        if(all(j[3:6]==1)) v_5=v_seq_r_fc[3:7]*4-1:5%%4
-      } else {# 以上都未命中，if j后四个元素==c(9,1,1,1)
-        if(all(j[-3:0+length(j)]==c(9,1,1,1)))
-          v_5=v_seq_r_fc[-4:0+length(v_seq_r_fc)]*4-1:5%%4
-      }
-    }
-  }
-  
-  if(length(v_5)==1){# 既不是同花也不是顺子,v_5未被赋值
-    k=factor(cut(v_7,seq(0,52,4),labels=1:13),
-             levels=order(v_sum_c_fc,decreasing=T),ordered=T)
-    v_5=sort(v_7[order(k)[1:5]])
-  }
-  
-  v_5
-}
-
 # match_mc5 ---------------------------------------------------------------
 match_mc5=function(id){
   i=c(1,id[1:4]+1)
@@ -130,25 +9,49 @@ match_mc5=function(id){
         sum(m_c5id[i[5]:j[5],5]))[flag])+1
 }
 
+# seq5in7 速度快1倍-------------------------------------------------------
+seq5in7=function(hand2,board5){
+  v_7=sort(c(hand2,board5))
+  m=cbind(v_7,0,0,p_face[v_7],p_suit[v_7])
+  
+  i=1;len=0
+  while(i<=7){# 实现了3个功能1.table 2.length 3.diff
+    j=i+1
+    while(j<=7 && m[j,4]==m[i,4]) j=j+1
+    ifelse(j==(i+1),(m[i,2]=1),(m[i:(j-1),2]=j-i))
+    len=len+1; m[len,3]=i; i=j
+  }
+  
+  v_5=0
+  # len>=5，则同花最大，顺子次之
+  if(len>=5){# if 1
+    n=0
+    for(i in 1:4){# 同花
+      j=(m[,5]==i); k=sum(j)
+      if(k>=5) {v_5=m[j,1][1:5]; break}
+      else n=n+k
+      
+      if(n>=3) break
+    }
+    
+    if(k<5){# 顺子
+      i=m[1:len,3]; j=diff(m[i,4])
+      
+      if(all(j[1:4]==1)) v_5=m[i[1:5],1]
+      else if(len>=6) {if(all(j[2:5]==1)) v_5=m[i[2:6],1]}
+      else if(len==7) {if(all(j[3:6]==1)) v_5=m[i[3:7],1]}
+      else {if(all(j[-3:0+(len-1)]==c(9,1,1,1))) v_5=m[i[-4:0+len],1]}
+    }
+  }# if 1
 
+  # 既不是同花也不是顺子,v_5未被赋值
+  if(length(v_5)==1){# if 2
+    i=order(m[,2],decreasing=T)
+    if(m[i[1],2]==4){# 对金刚（4条+对子+单牌）需区别对待
+      j=which(m[,2]==4)
+      if(j[1]!=1) v_5=m[c(1,j),1] else v_5=m[1:5,1]
+    } else v_5=m[sort(i[1:5]),1]# todo::是否有可能改进
+  }# if 2
 
-# 功能与combn()相同 ------------------------------------------------------------
-# m_c5_1=matrix(0L,nr=2598960,nc=5)
-# n=1
-# for(i in 1:48)
-#   for(j in (i+1):49)
-#     for(k in (j+1):50)
-#       for(l in (k+1):51)
-#         for(m in (l+1):52){
-#           m_c5_1[n,]=c(i,j,k,l,m)
-#           n=n+1
-#         }
-#           
-# all(m_c5_1==m_c5[,1:5])
-# 
-# 
-# 
-# 
-# write.csv(m_c5[,1:5],'m_c5.csv',row.names=F)
-
-
+    match_mc5(v_5)# 返回行索引
+}
