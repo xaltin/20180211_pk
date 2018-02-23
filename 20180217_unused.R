@@ -161,6 +161,70 @@ rm(brg,brg1,brg2,brg3,i,j)
 # 
 # write.csv(m_c5[,1:5],'m_c5.csv',row.names=F)
 
+# 已知各自的起手牌，pre_flop阶段，求各自胜率 ------------------------------
+# 已验证只有169种起手对子，因此该段代码不用（1326种全组合）
+m_p52in5=matrix(0L,nr=249900,nc=52)# 每张牌在m_c5中的哪一行出现
+for(i in 1:52)# 每张牌在m_c5中的哪一行、列出现过（只保留行标）
+  m_p52in5[,i]=which(m_c5[,1:5]==i,arr.ind=T)[,1]
+
+# 将每张牌的行标扩充至2598960，出现为1，否则为0
+n=matrix(0L,nrow=2598960,ncol=52)
+for(i in 1:52) n[m_p52in5[,i],i]=1
+
+m_c2in5=matrix(0L,nr=19600,nc=1326)# c2在m_c5里的行标，长度均为19600
+k=1
+l=vector('character',1326)
+for(i in 1:51)
+  for(j in (i+1):52){
+    m_c2in5[,k]=which(n[,i] & n[,j])
+    l[k]=paste(i,j,sep='_')
+    k=k+1
+  }
+colnames(m_c2in5)=l
+
+# 根据m_c2in5里每列的行标，得出对应的type和rank，19600x1326
+m_c2in5_type=apply(m_c2in5,2,function(x) m_c5[x,6])
+m_c2in5_rank=apply(m_c2in5,2,function(x) m_c5[x,7])
+# apply(m_c2in5_rank, 2, is.unsorted)
+# m_c2in5_rank进行排序
+m_c2in5_rank=apply(m_c2in5_rank,2,sort)
+
+# 使用which可以保留rownames
+k_p=m_c2in5_rank[,which(m_c2[,'pair']==1)]
+k_s=m_c2in5_rank[,which(m_c2[,'suit']==1)]
+k_o=m_c2in5_rank[,which(m_c2[,'offsuit']==1)]
+
+# pair 454种rank（78个），offsuit 455（936个），suit 620（312个）
+unique(apply(k_p,2,function(x) (length(unique(x)))))
+unique(apply(k_s,2,function(x) (length(unique(x)))))
+unique(apply(k_o,2,function(x) (length(unique(x)))))
+
+# 验证哪些c2的rank是一样的，然后去重
+# for(i in 1:13){# pair，通过
+#   j=k_p[,1:6+(i-1)*6]
+#   apply(j, 1, function(x) stopifnot(x==x[1]))
+# }
+k_plite=k_p[,seq(1,by=6,length.out=13)]
+
+i=t(sapply(strsplit(dimnames(k_s)[[2]],'_'), as.integer))
+i=ceiling(i/4)
+j=order(i[,1],i[,2])
+# for(l in 0:77){# suit，通过
+#   m=k_s[,j[1:4+l*4]]
+#   apply(m, 1, function(x) stopifnot(x==x[1]))
+# }
+k_slite=k_s[,j[seq(1,by=4,length.out=78)]]
+
+i=t(sapply(strsplit(dimnames(k_o)[[2]],'_'), as.integer))
+i=ceiling(i/4)
+is.unsorted(i[,1])# i[,1]已排序
+j=order(i[,1],i[,2])
+# for(l in 0:77){# offsuit，通过
+#   m=k_o[,j[1:12+l*12]]
+#   apply(m, 1, function(x) stopifnot(x==x[1]))
+# }
+k_olite=k_o[,j[seq(1,by=12,length.out=78)]]
+
 
 # program test and validation -----------------------------------------
 # 1. 验证match_mc5，通过

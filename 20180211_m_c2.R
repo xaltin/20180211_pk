@@ -1,115 +1,97 @@
-# 1. 己方2张手牌的wp ----------------------------------------------
-# v_52=1:52
-# N=100000
-# # 记录169种起手牌的9种牌型的出现次数，以及胜、平次数，运行169*2*10w=3380w次
-# m_wp_my=matrix(nr=nrow(m_c2sam),nc=11)
-# 
-# tt=Sys.time()
-# for(i in 1:nrow(m_c2sam)){
-#   v_my2=as.vector(m_c2sam[i,1:2])# 己方2张手牌,as.vector取消name
-#   
-#   v_wp_my=vector('integer',11)# 记录9种牌型的出现次数，以及胜、平次数
-#   for(j in 1:N){# for 2
-#     v_op2=sample(v_52[-v_my2],2)# 对手2张手牌
-#     v_bd5=sample(v_52[-c(v_my2,v_op2)],5)# 5张公共牌
-#     
-#     rn_my=seq5in7(v_my2,v_bd5)# 返回v_my5的行索引
-#     rn_op=seq5in7(v_op2,v_bd5)# 返回v_op5的行索引
-#     
-#     # 命中某种类型，则某种类型+1
-#     v_wp_my[m_c5[rn_my,6]]=v_wp_my[m_c5[rn_my,6]]+1
-#     # 记录胜、平次数
-#     if(m_c5[rn_my,7]<m_c5[rn_op,7])
-#       v_wp_my[10]=v_wp_my[10]+1
-#     else if(m_c5[rn_my,7]==m_c5[rn_op,7])
-#       v_wp_my[11]=v_wp_my[11]+1
-#   }# for 2
-#   m_wp_my[i,]=v_wp_my
-# }
-# Sys.time()-tt
-# 
-# d_wp_my=data.frame(paste(d_pk$name[m_c2sam[,1]],d_pk$name[m_c2sam[,2]],
-#                          c(rep('p',13),rep('s',78),rep('o',78)),sep=''),
-#                    m_wp_my,N-m_wp_my[,10]-m_wp_my[,11],
-#                    stringsAsFactors=F)
-# 
-# colnames(d_wp_my)=c('name','rflush','four','house','flush','straight',
-#                     'three','tpair','pair','high','win','equal','lost')
-# 
-# # # 169种起手牌，己方和对手起手牌各运行10w次，耗时77.7 mins
-# saveRDS(d_wp_my,'data/d_wp_my_169_10w.RData')
-# write.csv(d_wp_my,'data/d_wp_my_169_10w.csv')
+# 已知各自的起手牌，pre_flop阶段，求各自胜率 ------------------------------
+n=sort(unique(as.vector(m_c2sam[,1:2])))
 
+m_p26in5=matrix(0L,nr=249900,nc=26)# 每张牌在m_c5中的哪一行出现
+for(j in 1:26)# 每张牌在m_c5中的哪一行、列出现过（只保留行标）
+  m_p26in5[,j]=which(m_c5[,1:5]==n[j],arr.ind=T)[,1]
 
-# 1. 己方2张手牌的wp ----------------------------------------------
-# v_52=1:52
-# N=100000
-# # 记录169种起手牌的9种牌型的出现次数，以及胜、平次数，运行169*2*10w=3380w次
-# m_rn_169_my=matrix(nr=N,nc=169)
-# m_rn_169_op=matrix(nr=N,nc=169)
-# 
-# tt=Sys.time()
-# for(i in 1:nrow(m_c2sam)){
-#   v_my2=as.vector(m_c2sam[i,1:2])# 己方2张手牌,as.vector取消name
-# 
-#   v_wp_my=vector('integer',11)# 记录9种牌型的出现次数，以及胜、平次数
-#   for(j in 1:N){# for 2
-#     v_op2=sample(v_52[-v_my2],2)# 对手2张手牌
-#     v_bd5=sample(v_52[-c(v_my2,v_op2)],5)# 5张公共牌
-# 
-#     m_rn_169_my[j,i]=seq5in7(v_my2,v_bd5)# 返回v_my5的行索引
-#     m_rn_169_op[j,i]=seq5in7(v_op2,v_bd5)# 返回v_op5的行索引
-#   }
-# }
-# Sys.time()-tt
-# 
-# colnames(m_rn_169_my)=rownames(m_c2sam)
-# colnames(m_rn_169_op)=rownames(m_c2sam)
-# 
-# # 169种起手牌，己方和对手起手牌各运行10w次，耗时77.7 mins
-# saveRDS(m_rn_169_my,'data/m_rn_169_my_10w.RData')
-# write.csv(m_rn_169_my,'data/m_rn_169_my_10w.csv')
-# saveRDS(m_rn_169_op,'data/m_rn_169_op_10w.RData')
-# write.csv(m_rn_169_op,'data/m_rn_169_op_10w.csv')
+# 将每张牌的行标扩充至2598960，出现为1，否则为0
+m=matrix(0L,nrow=2598960,ncol=26)
+for(i in 1:26) m[m_p26in5[,i],i]=1
 
+m_c2in5=matrix(0L,nr=19600,nc=169)# c2在m_c5里的行标，长度均为19600
+for(i in 1:169){
+  j=m_c2sam[i,1:2]
+  m_c2in5[,i]=which(m[,j[1]==n] & m[,j[2]==n])
+}
 
-# 2. 7张牌中各种牌型的出现概率，100m次，耗时45.3 mins----------------
-# v_52=1:52
-# N=100000000
-# v_rn_5=vector('integer',N)
-# # names(v_type_5in7)=c('rflush','four','house','flush','straight',
-# # 'three','tpair','pair','high')
-# 
-# tt=Sys.time()
-# for(i in 1:N){# for 2
-#   v_7=sample(v_52,7)# 随机7张牌
-#   v_rn_5[i]=seq5in7(v_7[1:2],v_7[3:7])#己方5张成牌
-# }
-# Sys.time()-tt
-# 
-# saveRDS(v_rn_5,'data/v_rn_5_100m.RData')
+rm(m,n,m_p26in5)
 
-m_rn_169_my=readRDS('data/m_rn_169_my_10w.RData')
-m_rn_169_op=readRDS('data/m_rn_169_op_10w.RData')
-v_rn_5=readRDS('data/v_rn_5_100m.RData')
+# 根据m_c2in5里每列的行标，得出对应的type和rank，19600x169
+m_c2in5_type=apply(m_c2in5,2,function(x) m_c5[x,6])
+m_c2in5_type=apply(m_c2in5_type,2,sort)
+# 不同的c2对应的类型个数不同，pair:5，suit:(9,7)，offsuit:(7,6)
+apply(m_c2in5_type,2,function(x) (length(unique(x))))
+
+m_c2in5_rank=apply(m_c2in5,2,function(x) m_c5[x,7])
+# apply(m_c2in5_rank, 2, is.unsorted)
+# m_c2in5_rank进行排序
+m_c2in5_rank=apply(m_c2in5_rank,2,sort)
+
+# k_p:pair, k_s:suit, k_o:offsuit
+k_p=m_c2in5_rank[,1:13]
+k_s=m_c2in5_rank[,14:91]
+k_o=m_c2in5_rank[,92:169]
+
+# pair 454种rank（13个），suit 620（78个，offsuit 455（78个））
+unique(apply(k_p,2,function(x) (length(unique(x)))))
+unique(apply(k_s,2,function(x) (length(unique(x)))))
+unique(apply(k_o,2,function(x) (length(unique(x)))))
 
 
 
 
-# 2. 对d_wp_my 进行统计分析-------------------------------------------
-# 加载
-d_wp_my=readRDS('data/d_wp_my_169_10w.RData')
 
-# 1. 13x13 matrix for 2 people's 169's wp
-i=round((d_wp_my$win+d_wp_my$equal/2)*100/N,1)
+------------------------------
+i1=m_c2in5_rank[,1]
+i2=m_c2in5_rank[,7]
+i=1;j=1;k=vector('integer',0)
+while(i<=length(i1) && j<=length(i2)){
+  if(i1[i]<i2[j]){
+    k=append(k,1);i=i+1
+  }else if(i1[i]==i2[j]){
+    k=append(k,NA);i=i+1;j=j+1
+  }else{
+    k=append(k,0);j=j+1
+  }
+}
 
-m_p2_13x13=diag(i[1:13],13,13)
-m_p2_13x13[lower.tri(m_p2_13x13)]=i[14:91]
-m_p2_13x13=t(m_p2_13x13)
-m_p2_13x13[lower.tri(m_p2_13x13)]=i[92:169]
-rownames(m_p2_13x13)=c('A','K','Q','J','T',9:2)
-colnames(m_p2_13x13)=c('A','K','Q','J','T',9:2)
-# write.csv(m_p2_13x13,'data/m_p2_13x13_10w.csv')
+if(i<=length(i1)){
+  k=append(k,rep(0,length(i1)-i+1))
+}else if (j<=length(i2)){
+  k=append(k,rep(1,length(i2)-j+1))
+}
+
+c(3,1,1)
+c(2,1,2)
+c(1,1,3)
+c(0,1,4)
+c(0,0,5)
+
+k=1
+for(i in 1:51)
+  for(j in (i+1):52)
+    {print(k);k=k+1}
+
+
+i1_300=m_c2in5_rank[,c(1,300)]
+i1_300=apply(i1_300, 2, unique)
+i1_300=do.call(cbind,i1_300)
+
+
+
+
+
+
+# tag ---------------------------------------------------------------------
+i=m_c5[,1:2]
+j=data.frame(table(i[,2],i[,1]))
+
+
+
+
+
+
 
 # 1.将m_c2lite的因子加入到d_wp_my
 # 2.按照每种类型（9列）对169种m_c2lite进行绘图，根据因子进行着色

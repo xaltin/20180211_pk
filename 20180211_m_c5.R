@@ -162,9 +162,71 @@ m_c5id=cbind(c(table(m_c5[,1]),0,0,0,0),
              c(0,0,0,0,table(m_c5[1:48,5])))
 dimnames(m_c5id)=NULL
 
+# 1. 己方2张手牌的wp，耗时3.24 hours-------------------------------
+# v_52=1:52
+# N=300000
+# # 记录169种起手牌的9种牌型的出现次数，以及胜、平次数，运行169*2*10w=3380w次
+# m_rn_169_my=matrix(nr=N,nc=169)
+# m_rn_169_op=matrix(nr=N,nc=169)
+# 
+# tt=Sys.time()
+# for(i in 1:nrow(m_c2sam)){
+#   v_my2=as.vector(m_c2sam[i,1:2])# 己方2张手牌,as.vector取消name
+# 
+#   v_wp_my=vector('integer',11)# 记录9种牌型的出现次数，以及胜、平次数
+#   for(j in 1:N){# for 2
+#     v_op2=sample(v_52[-v_my2],2)# 对手2张手牌
+#     v_bd5=sample(v_52[-c(v_my2,v_op2)],5)# 5张公共牌
+# 
+#     m_rn_169_my[j,i]=seq5in7(v_my2,v_bd5)# 返回v_my5的行索引
+#     m_rn_169_op[j,i]=seq5in7(v_op2,v_bd5)# 返回v_op5的行索引
+#   }
+# }
+# Sys.time()-tt
+# 
+# colnames(m_rn_169_my)=rownames(m_c2sam)
+# colnames(m_rn_169_op)=rownames(m_c2sam)
+# 
+# # 169种起手牌，己方和对手起手牌各运行30w次，耗时1.173 hours
+# saveRDS(m_rn_169_my,'data/m_rn_169_my_30w.RData')
+# saveRDS(m_rn_169_op,'data/m_rn_169_op_30w.RData')
 
-# 防止data.frame导致读取性能降低，单独赋值成vector ----------------------------------------
-p_poke=1:52
-p_name=d_pk$name
-p_face=d_pk$face
-p_suit=rep(1:4,13)
+
+# 2. 7张牌中各种牌型的出现概率，100m次，耗时3.24 hours----------------
+# v_52=1:52
+# N=100000000
+# v_rn_5=vector('integer',N)
+# # names(v_type_5in7)=c('rflush','four','house','flush','straight',
+# # 'three','tpair','pair','high')
+# 
+# tt=Sys.time()
+# for(i in 1:N){# for 2
+#   v_7=sample(v_52,7)# 随机7张牌
+#   v_rn_5[i]=seq5in7(v_7[1:2],v_7[3:7])#己方5张成牌
+# }
+# Sys.time()-tt
+# 
+# saveRDS(v_rn_5,'data/v_rn_5_100m.RData')
+
+# readRDS -----------------------------------------------------------------
+m_rn_169_my=readRDS('data/m_rn_169_my_30w.RData')
+m_rn_169_op=readRDS('data/m_rn_169_op_30w.RData')
+v_rn_5=readRDS('data/v_rn_5_100m.RData')
+
+# 13x13 matrix for 2 people's 169's wp-------------------------------------
+# v_wp_my=vector('integer',169)
+# for(i in 1:169){
+#   j=m_c5[m_rn_169_my[,i],7]
+#   k=m_c5[m_rn_169_op[,i],7]
+#   
+#   v_wp_my[i]=round((sum(j<k)+sum(j==k)/2)*100/nrow(m_rn_169_my),1)
+# }
+# 
+# m_p2_13x13=diag(v_wp_my[1:13],13,13)
+# m_p2_13x13[lower.tri(m_p2_13x13)]=v_wp_my[14:91]
+# m_p2_13x13=t(m_p2_13x13)
+# m_p2_13x13[lower.tri(m_p2_13x13)]=v_wp_my[92:169]
+# rownames(m_p2_13x13)=c('A','K','Q','J','T',9:2)
+# colnames(m_p2_13x13)=c('A','K','Q','J','T',9:2)
+# 
+# write.csv(m_p2_13x13,'data/m_p2_13x13_30w.csv')

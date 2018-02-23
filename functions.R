@@ -1,18 +1,22 @@
 # match_mc5 ---------------------------------------------------------------
 match_mc5=function(id){
-  i=c(1,id[1:4]+1)
-  j=id-1
-  flag=(i<=j)
+  i=c(1,id[1:4]+1); j=id-1; flag=(i<=j)
   
   sum(c(sum(m_c5id[i[1]:j[1],1]),sum(m_c5id[i[2]:j[2],2]),
         sum(m_c5id[i[3]:j[3],3]),sum(m_c5id[i[4]:j[4],4]),
         sum(m_c5id[i[5]:j[5],5]))[flag])+1
 }
 
-# seq5in7 速度快1倍-------------------------------------------------------
+
+# 防止data.frame导致读取性能降低，单独赋值成vector ----------------------------
+p_face=d_pk$face
+p_suit=rep(1:4,13)
+m=matrix(nr=7,nc=5)# 提前创建m，function中使用[,]赋值，seq5in7提升7.8%
+
+# seq5in7 速度较原来快1倍------------------------------------------------------
 seq5in7=function(hand2,board5){
   v_7=sort(c(hand2,board5))
-  m=cbind(v_7,0,0,p_face[v_7],p_suit[v_7])
+  m[,]=cbind(v_7,0,0,p_face[v_7],p_suit[v_7])
   
   i=1;len=0
   while(i<=7){# 实现了3个功能1.table 2.length 3.diff
