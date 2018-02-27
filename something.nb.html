@@ -178,22 +178,35 @@ $(document).ready(function () {
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZF9waz1kYXRhLmZyYW1lKG51bT0xOjUyKVxuaj1kX3BrJG51bVxuXG5zeXN0ZW0udGltZShmb3IoaSBpbiAxOjEwMDAwMDApe1xuICBqXG59KVxuXG5zeXN0ZW0udGltZShmb3IoaSBpbiAxOjEwMDAwMDApe1xuICAxOjUyXG59KVxuXG5zeXN0ZW0udGltZShmb3IoaSBpbiAxOjEwMDAwMDApe1xuICBkX3BrJG51bVxufSlcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZF9waz1kYXRhLmZyYW1lKG51bT0xOjUyKVxuaj1kX3BrJG51bVxuc3lzdGVtLnRpbWUoZm9yKGkgaW4gMToxMDAwMDAwKXtcbiAgalxufSlcbmBgYCJ9 -->
 <pre class="r"><code>d_pk=data.frame(num=1:52)
 j=d_pk$num
-
 system.time(for(i in 1:1000000){
   j
-})
-
-system.time(for(i in 1:1000000){
+})</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoi55So5oi3IOezu+e7nyDmtYHpgJ0gXG4wLjAyIDAuMDEgMC4wNCBcbiJ9 -->
+<pre><code>用户 系统 流逝 
+0.02 0.01 0.04 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3lzdGVtLnRpbWUoZm9yKGkgaW4gMToxMDAwMDAwKXtcbiAgMTo1MlxufSlcbmBgYCJ9 -->
+<pre class="r"><code>system.time(for(i in 1:1000000){
   1:52
-})
-
-system.time(for(i in 1:1000000){
+})</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoi55So5oi3IOezu+e7nyDmtYHpgJ0gXG4wLjA4IDAuMDAgMC4wOCBcbiJ9 -->
+<pre><code>用户 系统 流逝 
+0.08 0.00 0.08 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3lzdGVtLnRpbWUoZm9yKGkgaW4gMToxMDAwMDAwKXtcbiAgZF9wayRudW1cbn0pXG5gYGAifQ== -->
+<pre class="r"><code>system.time(for(i in 1:1000000){
   d_pk$num
 })</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoi55So5oi3IOezu+e7nyDmtYHpgJ0gXG41LjkyIDAuMDAgNS45NyBcbiJ9 -->
+<pre><code>用户 系统 流逝 
+5.92 0.00 5.97 </code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <ol start="2" style="list-style-type: decimal">
@@ -201,13 +214,31 @@ system.time(for(i in 1:1000000){
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKGk9c2FtcGxlKDE6MTAsMTApKVxuKG9yZD1vcmRlcihpKSlcbiMgaVtvcmRd5piv5Y2H5bqP5ZCR6YeP77yMZmluZEludGVydmFsKCnnlKjkuozliIbmn6Xmib7lh73mlbDmm7/ku6PvvIzlpI3mnYLluqbku45u6ZmN5Li6bG9nKG4pXG4ocG9zPWZpbmRJbnRlcnZhbCgyLGlbb3JkXSkpXG5pW3Bvc11cbmBgYCJ9 -->
-<pre class="r"><code>(i=sample(1:10,10))
-(ord=order(i))
-# i[ord]是升序向量，findInterval()用二分查找函数替代，复杂度从n降为log(n)
-(pos=findInterval(2,i[ord]))
-i[pos]</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKGk9c2FtcGxlKDE6MTAsMTApKVxuYGBgIn0= -->
+<pre class="r"><code>(i=sample(1:10,10))</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSAgNiAgMiAgMSAgNSAgMyAgNCAgOSAxMCAgOCAgN1xuIn0= -->
+<pre><code> [1]  6  2  1  5  3  4  9 10  8  7</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKG9yZD1vcmRlcihpKSlcbmBgYCJ9 -->
+<pre class="r"><code>(ord=order(i))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSAgMyAgMiAgNSAgNiAgNCAgMSAxMCAgOSAgNyAgOFxuIn0= -->
+<pre><code> [1]  3  2  5  6  4  1 10  9  7  8</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBpW29yZF3mmK/ljYfluo/lkJHph4/vvIxmaW5kSW50ZXJ2YWwoKeeUqOS6jOWIhuafpeaJvuWHveaVsOabv+S7o++8jOWkjeadguW6puS7jm7pmY3kuLpsb2cobilcbihwb3M9ZmluZEludGVydmFsKDIsaVtvcmRdKSlcbmBgYCJ9 -->
+<pre class="r"><code># i[ord]是升序向量，findInterval()用二分查找函数替代，复杂度从n降为log(n)
+(pos=findInterval(2,i[ord]))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDJcbiJ9 -->
+<pre><code>[1] 2</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaVtwb3NdXG5gYGAifQ== -->
+<pre class="r"><code>i[pos]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDJcbiJ9 -->
+<pre><code>[1] 2</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <ol start="3" style="list-style-type: decimal">
@@ -220,6 +251,18 @@ i[pos]</code></pre>
   assign(paste('i_',i,sep=''),1:10+i)
 do.call(rbind,mget(paste('i_',1:9,sep='')))</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgIFssMV0gWywyXSBbLDNdIFssNF0gWyw1XSBbLDZdIFssN10gWyw4XSBbLDldIFssMTBdXG5pXzEgICAgMiAgICAzICAgIDQgICAgNSAgICA2ICAgIDcgICAgOCAgICA5ICAgMTAgICAgMTFcbmlfMiAgICAzICAgIDQgICAgNSAgICA2ICAgIDcgICAgOCAgICA5ICAgMTAgICAxMSAgICAxMlxuaV8zICAgIDQgICAgNSAgICA2ICAgIDcgICAgOCAgICA5ICAgMTAgICAxMSAgIDEyICAgIDEzXG5pXzQgICAgNSAgICA2ICAgIDcgICAgOCAgICA5ICAgMTAgICAxMSAgIDEyICAgMTMgICAgMTRcbmlfNSAgICA2ICAgIDcgICAgOCAgICA5ICAgMTAgICAxMSAgIDEyICAgMTMgICAxNCAgICAxNVxuaV82ICAgIDcgICAgOCAgICA5ICAgMTAgICAxMSAgIDEyICAgMTMgICAxNCAgIDE1ICAgIDE2XG5pXzcgICAgOCAgICA5ICAgMTAgICAxMSAgIDEyICAgMTMgICAxNCAgIDE1ICAgMTYgICAgMTdcbmlfOCAgICA5ICAgMTAgICAxMSAgIDEyICAgMTMgICAxNCAgIDE1ICAgMTYgICAxNyAgICAxOFxuaV85ICAgMTAgICAxMSAgIDEyICAgMTMgICAxNCAgIDE1ICAgMTYgICAxNyAgIDE4ICAgIDE5XG4ifQ== -->
+<pre><code>    [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+i_1    2    3    4    5    6    7    8    9   10    11
+i_2    3    4    5    6    7    8    9   10   11    12
+i_3    4    5    6    7    8    9   10   11   12    13
+i_4    5    6    7    8    9   10   11   12   13    14
+i_5    6    7    8    9   10   11   12   13   14    15
+i_6    7    8    9   10   11   12   13   14   15    16
+i_7    8    9   10   11   12   13   14   15   16    17
+i_8    9   10   11   12   13   14   15   16   17    18
+i_9   10   11   12   13   14   15   16   17   18    19</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <ol start="4" style="list-style-type: decimal">
@@ -227,15 +270,17 @@ do.call(rbind,mget(paste('i_',1:9,sep='')))</code></pre>
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyAhISHmjIflrppsZXZlbHPlkoxsYWJlbHPnmoTmgKfog73mj5DljYc2LTflgI3vvIzlj6rmjIflrppsZXZlbHPmgKfog73mj5DljYfkvJrnqI3pq5gsIGFib3V0IDExIHNlY29uZHNcbm1fYzVfaW4yPWZhY3RvcihtX2MyX2luNSxsZXZlbHM9bV9jMlssJ3BybV9wcmQnXSxsYWJlbHM9MToxMzI2LG9yZGVyZWQ9VClcbiMgISEhbV9jNeWcqG1fYzLkuK3nmoTluo/lj7csMTk2MDAqMTMyNiwg5Yip55SobmFtZXPmmKDlsITov5vooYzmn6Xmib7vvIxhYm91dCAxMyBzZWNvbmRzXG5uYW1lcyhtX2M1X2luMik9cmVwKDE6MjU5ODk2MCwxMClcbiMgYXR0cmlidXRlcyhtX2M1X2luMilcbm1fYzVfaW4yPW1hdHJpeChhcy5pbnRlZ2VyKG5hbWVzKHNvcnQobV9jNV9pbjIpKSksMTk2MDAsMTMyNilcbm1fYzVfaW4yPWFwcGx5KG1fYzVfaW4yLDIsc29ydClcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyAhISHmjIflrppsZXZlbHPlkoxsYWJlbHPnmoTmgKfog73mj5DljYc2LTflgI3vvIzlj6rmjIflrppsZXZlbHPmgKfog73mj5DljYfkvJrnqI3pq5gsIGFib3V0IDExIHNlY29uZHNcbm1fYzVfaW4yPWZhY3RvcihtX2MyX2luNSxsZXZlbHM9bV9jMlssJ3BybV9wcmQnXSxsYWJlbHM9MToxMzI2LG9yZGVyZWQ9VClcbmBgYCJ9 -->
 <pre class="r"><code># !!!指定levels和labels的性能提升6-7倍，只指定levels性能提升会稍高, about 11 seconds
-m_c5_in2=factor(m_c2_in5,levels=m_c2[,'prm_prd'],labels=1:1326,ordered=T)
-# !!!m_c5在m_c2中的序号,19600*1326, 利用names映射进行查找，about 13 seconds
-names(m_c5_in2)=rep(1:2598960,10)
-# attributes(m_c5_in2)
-m_c5_in2=matrix(as.integer(names(sort(m_c5_in2))),19600,1326)
-m_c5_in2=apply(m_c5_in2,2,sort)</code></pre>
+m_c5_in2=factor(m_c2_in5,levels=m_c2[,'prm_prd'],labels=1:1326,ordered=T)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gZmFjdG9yKG1fYzJfaW41LCBsZXZlbHMgPSBtX2MyWywgXCJwcm1fcHJkXCJdLCBsYWJlbHMgPSAxOjEzMjYsICA6IFxuICBvYmplY3QgJ21fYzJfaW41JyBub3QgZm91bmRcbkluIGFkZGl0aW9uOiBXYXJuaW5nIG1lc3NhZ2U6XG5JbiBzdHJzcGxpdChjb2RlLCBcIlxcblwiLCBmaXhlZCA9IFRSVUUpIDpcbiAgaW5wdXQgc3RyaW5nIDEgaXMgaW52YWxpZCBpbiB0aGlzIGxvY2FsZVxuIn0= -->
+<pre><code>Error in factor(m_c2_in5, levels = m_c2[, &quot;prm_prd&quot;], labels = 1:1326,  : 
+  object 'm_c2_in5' not found
+In addition: Warning message:
+In strsplit(code, &quot;\n&quot;, fixed = TRUE) :
+  input string 1 is invalid in this locale</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <ol start="5" style="list-style-type: decimal">
@@ -289,7 +334,7 @@ system.time(for(i in 1:1000000){
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<ol start="7" style="list-style-type: decimal">
+<ol start="8" style="list-style-type: decimal">
 <li>尽量使用vector不使用matrix</li>
 </ol>
 <!-- rnb-text-end -->
@@ -312,9 +357,76 @@ system.time(for(i in 1:1000000){
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<ol start="9" style="list-style-type: decimal">
+<li>table()的效率很低</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaj1jKDE6NCwxOjMpXG5rPXRhYmxlKGopXG5zeXN0ZW0udGltZSh7XG4gIGZvcihpIGluIDE6MTAwMDApIGs9dGFibGUoailcbn0pXG5gYGAifQ== -->
+<pre class="r"><code>j=c(1:4,1:3)
+k=table(j)
+system.time({
+  for(i in 1:10000) k=table(j)
+})</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoi55So5oi3IOezu+e7nyDmtYHpgJ0gXG4wLjg0IDAuMDUgMC45MiBcbiJ9 -->
+<pre><code>用户 系统 流逝 
+0.84 0.05 0.92 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaz12ZWN0b3IoJ2ludGVnZXInLDQpXG5zeXN0ZW0udGltZSh7XG4gIGZvcihpIGluIDE6MTAwMDApXG4gICAgZm9yKGwgaW4gMTo3KVxuICAgICAga1tqW2xdXT1rW2pbbF1dKzFcbn0pXG5gYGAifQ== -->
+<pre class="r"><code>k=vector('integer',4)
+system.time({
+  for(i in 1:10000)
+    for(l in 1:7)
+      k[j[l]]=k[j[l]]+1
+})</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoi55So5oi3IOezu+e7nyDmtYHpgJ0gXG4gICAwICAgIDAgICAgMCBcbiJ9 -->
+<pre><code>用户 系统 流逝 
+   0    0    0 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ol start="10" style="list-style-type: decimal">
+<li>对向量直接赋值速度最快</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYT0xOjRcbnN5c3RlbS50aW1lKFxuICB7Zm9yKGkgaW4gMToyMDAwMDAwKSBhPTE6NH1cbilcbmBgYCJ9 -->
+<pre class="r"><code>a=1:4
+system.time(
+  {for(i in 1:2000000) a=1:4}
+)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoi55So5oi3IOezu+e7nyDmtYHpgJ0gXG4wLjE0IDAuMDAgMC4xMyBcbiJ9 -->
+<pre><code>用户 系统 流逝 
+0.14 0.00 0.13 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYT0xOjRcbnN5c3RlbS50aW1lKFxuICB7Zm9yKGkgaW4gMToyMDAwMDAwKSBhW109MTo0fVxuKVxuYGBgIn0= -->
+<pre class="r"><code>a=1:4
+system.time(
+  {for(i in 1:2000000) a[]=1:4}
+)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoi55So5oi3IOezu+e7nyDmtYHpgJ0gXG4wLjQ3IDAuMDAgMC40OCBcbiJ9 -->
+<pre><code>用户 系统 流逝 
+0.47 0.00 0.48 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYT0xOjRcbnN5c3RlbS50aW1lKFxuICB7Zm9yKGkgaW4gMToyMDAwMDAwKSBhWzE6NF09MTo0fVxuKVxuYGBgIn0= -->
+<pre class="r"><code>a=1:4
+system.time(
+  {for(i in 1:2000000) a[1:4]=1:4}
+)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoi55So5oi3IOezu+e7nyDmtYHpgJ0gXG4gMC41ICAwLjAgIDAuNSBcbiJ9 -->
+<pre><code>用户 系统 流逝 
+ 0.5  0.0  0.5 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIuS9v+eUqFLnmoTkuIDkupvmioDlt6forrDlvZUiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQoNCjEuIOW+queOr++8iOWwpOWFtuaYr+Wkp+W+queOr++8ieS5i+WJje+8jOWvueW+heefqemYteOAgeaVsOaNruahhuetie+8jOS4gOWumuimgeiuvuWumuWPmOmHj+W5tui1i+WAvO+8jOS4jeeEtuiAl+aXtuW3qOWkpw0KYGBge3J9DQpkX3BrPWRhdGEuZnJhbWUobnVtPTE6NTIpDQpqPWRfcGskbnVtDQoNCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCl7DQogIGoNCn0pDQoNCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCl7DQogIDE6NTINCn0pDQoNCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCl7DQogIGRfcGskbnVtDQp9KQ0KYGBgDQoNCjIuIOWWhOeUqG9yZGVy6L+b6KGM5Lmx5bqP5p+l5om+77yM5aiB5Yqb5beo5aSnDQpgYGB7cn0NCihpPXNhbXBsZSgxOjEwLDEwKSkNCihvcmQ9b3JkZXIoaSkpDQojIGlbb3JkXeaYr+WNh+W6j+WQkemHj++8jGZpbmRJbnRlcnZhbCgp55So5LqM5YiG5p+l5om+5Ye95pWw5pu/5Luj77yM5aSN5p2C5bqm5LuObumZjeS4umxvZyhuKQ0KKHBvcz1maW5kSW50ZXJ2YWwoMixpW29yZF0pKQ0KaVtwb3NdDQpgYGANCg0KMy4gZG8uY2FsbCgpK3JiaW5kKCnnmoTkvb/nlKjvvIzlr7lsaXN06L+b6KGM5ZCI5bm2DQpgYGB7cn0NCmZvcihpIGluIDE6OSkNCiAgYXNzaWduKHBhc3RlKCdpXycsaSxzZXA9JycpLDE6MTAraSkNCmRvLmNhbGwocmJpbmQsbWdldChwYXN0ZSgnaV8nLDE6OSxzZXA9JycpKSkNCmBgYA0KDQo0LiDliKnnlKhmYWN0b3Lov5vooYzmn6Xmib4NCmBgYHtyfQ0KIyAhISHmjIflrppsZXZlbHPlkoxsYWJlbHPnmoTmgKfog73mj5DljYc2LTflgI3vvIzlj6rmjIflrppsZXZlbHPmgKfog73mj5DljYfkvJrnqI3pq5gsIGFib3V0IDExIHNlY29uZHMNCm1fYzVfaW4yPWZhY3RvcihtX2MyX2luNSxsZXZlbHM9bV9jMlssJ3BybV9wcmQnXSxsYWJlbHM9MToxMzI2LG9yZGVyZWQ9VCkNCiMgISEhbV9jNeWcqG1fYzLkuK3nmoTluo/lj7csMTk2MDAqMTMyNiwg5Yip55SobmFtZXPmmKDlsITov5vooYzmn6Xmib7vvIxhYm91dCAxMyBzZWNvbmRzDQpuYW1lcyhtX2M1X2luMik9cmVwKDE6MjU5ODk2MCwxMCkNCiMgYXR0cmlidXRlcyhtX2M1X2luMikNCm1fYzVfaW4yPW1hdHJpeChhcy5pbnRlZ2VyKG5hbWVzKHNvcnQobV9jNV9pbjIpKSksMTk2MDAsMTMyNikNCm1fYzVfaW4yPWFwcGx5KG1fYzVfaW4yLDIsc29ydCkNCmBgYA0KDQoNCjUuIOeUqGRpZmbmr5R0YWJsZeW/qzE25YCN77yM55Soc29ydOWSjGRpZmbmr5R0YWJsZeW/qzLlgI0NCmBgYHtyfQ0KIyAxMy4y56eSDQpzeXN0ZW0udGltZSh7Zm9yKGkgaW4gMToxMDAwMDApIHRhYmxlKDE6Nyl9KQ0KDQojIDAuOOenkg0Kc3lzdGVtLnRpbWUoe2ZvcihpIGluIDE6MTAwMDAwKSBkaWZmKDE6Nyl9KQ0KDQojIDTnp5INCnN5c3RlbS50aW1lKHtmb3IoaSBpbiAxOjEwMDAwMCkgc29ydCgxOjcpfSkNCg0KIyAwLjfnp5INCnN5c3RlbS50aW1lKHtmb3IoaSBpbiAxOjEwMDAwMCkgdW5pcXVlKDE6Nyl9KQ0KYGBgDQoNCg0KNi4g5piv5ZCm5o+Q5YmN6LWL5Y+Y6YeP5YWz57O75LiN5aSnDQpgYGB7cn0NCnN5c3RlbS50aW1lKHtuPTE6MTAwDQpmb3IoaSBpbiAxOjEwMDAwMDApIG49MToxMDB9KQ0KDQoNCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCkgbj0xOjEwMCkNCmBgYA0KDQo3LiDnn6npmLXpnIDmj5DliY3liJvlu7rvvIzlpoLmnpzmr4/mrKHliIbphY3ogJfml7blpKcNCmBgYHtyfQ0KbT1tYXRyaXgobnI9NyxuYz01KQ0Kc3lzdGVtLnRpbWUoZm9yKGkgaW4gMToxMDAwMDAwKXsNCiAgbVssXT0wDQp9KQ0KDQpzeXN0ZW0udGltZShmb3IoaSBpbiAxOjEwMDAwMDApew0KICBtPW1hdHJpeChucj03LG5jPTUpDQp9KQ0KYGBgDQoNCg0KNy4g5bC96YeP5L2/55SodmVjdG9y5LiN5L2/55SobWF0cml4DQpgYGB7cn0NCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCkNCiAgbT1tYXRyaXgobnI9NCxuYz0xMykpDQoNCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCkNCiAgbj12ZWN0b3IoJ2ludGVnZXInLDUyKSkNCmBgYA0KDQoNCg0KDQoNCg0KDQoNCg0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIuS9v+eUqFLnmoTkuIDkupvmioDlt6forrDlvZUiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQoNCjEuIOW+queOr++8iOWwpOWFtuaYr+Wkp+W+queOr++8ieS5i+WJje+8jOWvueW+heefqemYteOAgeaVsOaNruahhuetie+8jOS4gOWumuimgeiuvuWumuWPmOmHj+W5tui1i+WAvO+8jOS4jeeEtuiAl+aXtuW3qOWkpw0KYGBge3J9DQpkX3BrPWRhdGEuZnJhbWUobnVtPTE6NTIpDQpqPWRfcGskbnVtDQoNCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCl7DQogIGoNCn0pDQoNCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCl7DQogIDE6NTINCn0pDQoNCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCl7DQogIGRfcGskbnVtDQp9KQ0KYGBgDQoNCjIuIOWWhOeUqG9yZGVy6L+b6KGM5Lmx5bqP5p+l5om+77yM5aiB5Yqb5beo5aSnDQpgYGB7cn0NCihpPXNhbXBsZSgxOjEwLDEwKSkNCihvcmQ9b3JkZXIoaSkpDQojIGlbb3JkXeaYr+WNh+W6j+WQkemHj++8jGZpbmRJbnRlcnZhbCgp55So5LqM5YiG5p+l5om+5Ye95pWw5pu/5Luj77yM5aSN5p2C5bqm5LuObumZjeS4umxvZyhuKQ0KKHBvcz1maW5kSW50ZXJ2YWwoMixpW29yZF0pKQ0KaVtwb3NdDQpgYGANCg0KMy4gZG8uY2FsbCgpK3JiaW5kKCnnmoTkvb/nlKjvvIzlr7lsaXN06L+b6KGM5ZCI5bm2DQpgYGB7cn0NCmZvcihpIGluIDE6OSkNCiAgYXNzaWduKHBhc3RlKCdpXycsaSxzZXA9JycpLDE6MTAraSkNCmRvLmNhbGwocmJpbmQsbWdldChwYXN0ZSgnaV8nLDE6OSxzZXA9JycpKSkNCmBgYA0KDQo0LiDliKnnlKhmYWN0b3Lov5vooYzmn6Xmib4NCmBgYHtyfQ0KIyAhISHmjIflrppsZXZlbHPlkoxsYWJlbHPnmoTmgKfog73mj5DljYc2LTflgI3vvIzlj6rmjIflrppsZXZlbHPmgKfog73mj5DljYfkvJrnqI3pq5gsIGFib3V0IDExIHNlY29uZHMNCm1fYzVfaW4yPWZhY3RvcihtX2MyX2luNSxsZXZlbHM9bV9jMlssJ3BybV9wcmQnXSxsYWJlbHM9MToxMzI2LG9yZGVyZWQ9VCkNCiMgISEhbV9jNeWcqG1fYzLkuK3nmoTluo/lj7csMTk2MDAqMTMyNiwg5Yip55SobmFtZXPmmKDlsITov5vooYzmn6Xmib7vvIxhYm91dCAxMyBzZWNvbmRzDQpuYW1lcyhtX2M1X2luMik9cmVwKDE6MjU5ODk2MCwxMCkNCiMgYXR0cmlidXRlcyhtX2M1X2luMikNCm1fYzVfaW4yPW1hdHJpeChhcy5pbnRlZ2VyKG5hbWVzKHNvcnQobV9jNV9pbjIpKSksMTk2MDAsMTMyNikNCm1fYzVfaW4yPWFwcGx5KG1fYzVfaW4yLDIsc29ydCkNCmBgYA0KDQoNCjUuIOeUqGRpZmbmr5R0YWJsZeW/qzE25YCN77yM55Soc29ydOWSjGRpZmbmr5R0YWJsZeW/qzLlgI0NCmBgYHtyfQ0KIyAxMy4y56eSDQpzeXN0ZW0udGltZSh7Zm9yKGkgaW4gMToxMDAwMDApIHRhYmxlKDE6Nyl9KQ0KDQojIDAuOOenkg0Kc3lzdGVtLnRpbWUoe2ZvcihpIGluIDE6MTAwMDAwKSBkaWZmKDE6Nyl9KQ0KDQojIDTnp5INCnN5c3RlbS50aW1lKHtmb3IoaSBpbiAxOjEwMDAwMCkgc29ydCgxOjcpfSkNCg0KIyAwLjfnp5INCnN5c3RlbS50aW1lKHtmb3IoaSBpbiAxOjEwMDAwMCkgdW5pcXVlKDE6Nyl9KQ0KYGBgDQoNCg0KNi4g5piv5ZCm5o+Q5YmN6LWL5Y+Y6YeP5YWz57O75LiN5aSnDQpgYGB7cn0NCnN5c3RlbS50aW1lKHtuPTE6MTAwDQpmb3IoaSBpbiAxOjEwMDAwMDApIG49MToxMDB9KQ0KDQoNCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCkgbj0xOjEwMCkNCmBgYA0KDQo3LiDnn6npmLXpnIDmj5DliY3liJvlu7rvvIzlpoLmnpzmr4/mrKHliIbphY3ogJfml7blpKcNCmBgYHtyfQ0KbT1tYXRyaXgobnI9NyxuYz01KQ0Kc3lzdGVtLnRpbWUoZm9yKGkgaW4gMToxMDAwMDAwKXsNCiAgbVssXT0wDQp9KQ0KDQpzeXN0ZW0udGltZShmb3IoaSBpbiAxOjEwMDAwMDApew0KICBtPW1hdHJpeChucj03LG5jPTUpDQp9KQ0KYGBgDQoNCg0KOC4g5bC96YeP5L2/55SodmVjdG9y5LiN5L2/55SobWF0cml4DQpgYGB7cn0NCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCkNCiAgbT1tYXRyaXgobnI9NCxuYz0xMykpDQoNCnN5c3RlbS50aW1lKGZvcihpIGluIDE6MTAwMDAwMCkNCiAgbj12ZWN0b3IoJ2ludGVnZXInLDUyKSkNCmBgYA0KDQoNCjkuIHRhYmxlKCnnmoTmlYjnjoflvojkvY4NCmBgYHtyfQ0Kaj1jKDE6NCwxOjMpDQprPXRhYmxlKGopDQpzeXN0ZW0udGltZSh7DQogIGZvcihpIGluIDE6MTAwMDApIGs9dGFibGUoaikNCn0pDQoNCms9dmVjdG9yKCdpbnRlZ2VyJyw0KQ0Kc3lzdGVtLnRpbWUoew0KICBmb3IoaSBpbiAxOjEwMDAwKQ0KICAgIGZvcihsIGluIDE6NykNCiAgICAgIGtbaltsXV09a1tqW2xdXSsxDQp9KQ0KYGBgDQoNCjEwLiDlr7nlkJHph4/nm7TmjqXotYvlgLzpgJ/luqbmnIDlv6sNCmBgYHtyfQ0KYT0xOjQNCnN5c3RlbS50aW1lKA0KICB7Zm9yKGkgaW4gMToyMDAwMDAwKSBhPTE6NH0NCikNCg0KYT0xOjQNCnN5c3RlbS50aW1lKA0KICB7Zm9yKGkgaW4gMToyMDAwMDAwKSBhW109MTo0fQ0KKQ0KDQphPTE6NA0Kc3lzdGVtLnRpbWUoDQogIHtmb3IoaSBpbiAxOjIwMDAwMDApIGFbMTo0XT0xOjR9DQopDQpgYGANCg0KDQoNCg0KDQoNCg0K</div>
 
 
 
