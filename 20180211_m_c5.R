@@ -162,10 +162,11 @@ m_c5id=cbind(c(table(m_c5[,1]),0,0,0,0),
              c(0,0,0,0,table(m_c5[1:48,5])))
 dimnames(m_c5id)=NULL
 
-# 1. 己方2张手牌的wp，耗时3.24 hours-------------------------------
+# 1. 己方2张手牌的wp，耗时3.05 h(0228-3.05h)-------------------------------
 # v_52=1:52
-# N=300000
-# # 记录169种起手牌的9种牌型的出现次数，以及胜、平次数，运行169*2*10w=3380w次
+# # N=300000
+# N=10000# 30w与1w的百分率相差1.1以内，耗时6 mins
+# # 记录169种起手牌的9种牌型的出现次数，以及胜、平次数，运行169*2*30w=1.014亿次
 # m_rn_169_my=matrix(nr=N,nc=169)
 # m_rn_169_op=matrix(nr=N,nc=169)
 # 
@@ -173,7 +174,6 @@ dimnames(m_c5id)=NULL
 # for(i in 1:nrow(m_c2sam)){
 #   v_my2=as.vector(m_c2sam[i,1:2])# 己方2张手牌,as.vector取消name
 # 
-#   v_wp_my=vector('integer',11)# 记录9种牌型的出现次数，以及胜、平次数
 #   for(j in 1:N){# for 2
 #     v_op2=sample(v_52[-v_my2],2)# 对手2张手牌
 #     v_bd5=sample(v_52[-c(v_my2,v_op2)],5)# 5张公共牌
@@ -187,12 +187,12 @@ dimnames(m_c5id)=NULL
 # colnames(m_rn_169_my)=rownames(m_c2sam)
 # colnames(m_rn_169_op)=rownames(m_c2sam)
 # 
-# # 169种起手牌，己方和对手起手牌各运行30w次，耗时1.173 hours
-# saveRDS(m_rn_169_my,'data/m_rn_169_my_30w.RData')
-# saveRDS(m_rn_169_op,'data/m_rn_169_op_30w.RData')
+# # 169种起手牌，己方和对手起手牌各运行30w次，耗时3.05 hours
+# saveRDS(m_rn_169_my,'data/m_rn_169_my_30w_0228.RData')
+# saveRDS(m_rn_169_op,'data/m_rn_169_op_30w_0228.RData')
 
 
-# 2. 7张牌中各种牌型的出现概率，100m次，耗时3.24 hours----------------
+# 2. 7张牌中各种牌型的出现概率，100m次，耗时2.84 h(0228-2.84h)----------------
 # v_52=1:52
 # N=100000000
 # v_rn_5=vector('integer',N)
@@ -206,19 +206,23 @@ dimnames(m_c5id)=NULL
 # }
 # Sys.time()-tt
 # 
-# saveRDS(v_rn_5,'data/v_rn_5_100m.RData')
+# saveRDS(v_rn_5,'data/v_rn_5_100m_0228.RData')
 
 # readRDS -----------------------------------------------------------------
-m_rn_169_my=readRDS('data/m_rn_169_my_30w.RData')
-m_rn_169_op=readRDS('data/m_rn_169_op_30w.RData')
-v_rn_5=readRDS('data/v_rn_5_100m.RData')
+# m_rn_169_my=readRDS('data/m_rn_169_my_30w.RData')
+# m_rn_169_op=readRDS('data/m_rn_169_op_30w.RData')
+# v_rn_5=readRDS('data/v_rn_5_100m.RData')
 
-# 13x13 matrix for 2 people's 169's wp-------------------------------------
+m_rn_169_my=readRDS('data/m_rn_169_my_30w_0228.RData')
+m_rn_169_op=readRDS('data/m_rn_169_op_30w_0228.RData')
+v_rn_5=readRDS('data/v_rn_5_100m_0228.RData')
+
+## 13x13 matrix for 2 people's 169's wp-------------------------------------
 # v_wp_my=vector('integer',169)
 # for(i in 1:169){
 #   j=m_c5[m_rn_169_my[,i],7]
 #   k=m_c5[m_rn_169_op[,i],7]
-#   
+# 
 #   v_wp_my[i]=round((sum(j<k)+sum(j==k)/2)*100/nrow(m_rn_169_my),1)
 # }
 # 
@@ -230,3 +234,60 @@ v_rn_5=readRDS('data/v_rn_5_100m.RData')
 # colnames(m_p2_13x13)=c('A','K','Q','J','T',9:2)
 # 
 # write.csv(m_p2_13x13,'data/m_p2_13x13_30w.csv')
+
+# 3. 己方2张手牌的wp，2个对手，耗时3.24 h(0228-3.05h)------------------------
+# v_52=1:52
+# # N=300000
+# N=20000# 30w与1w的百分率相差1.1以内，耗时6 mins
+# # 记录169种起手牌的9种牌型的出现次数，以及胜、平次数，运行169*3*2w=1014w次
+# m_rn_169_my=matrix(nr=N,nc=169)
+# m_rn_169_op1=matrix(nr=N,nc=169)
+# m_rn_169_op2=matrix(nr=N,nc=169)
+# 
+# tt=Sys.time()
+# for(i in 1:nrow(m_c2sam)){
+#   v_my2=as.vector(m_c2sam[i,1:2])# 己方2张手牌,as.vector取消name
+# 
+#   for(j in 1:N){# for 2
+#     v_op12=sample(v_52[-v_my2],2)# 对手1的2张手牌
+#     v_op22=sample(v_52[-c(v_my2,v_op12)],2)# 对手2的2张手牌
+#     v_bd5=sample(v_52[-c(v_my2,v_op12,v_op22)],5)# 5张公共牌
+# 
+#     m_rn_169_my[j,i]=seq5in7(v_my2,v_bd5)# 返回v_my5的行索引
+#     m_rn_169_op1[j,i]=seq5in7(v_op12,v_bd5)# 返回v_op5的行索引
+#     m_rn_169_op2[j,i]=seq5in7(v_op22,v_bd5)# 返回v_op5的行索引
+#   }
+# }
+# Sys.time()-tt
+# 
+# colnames(m_rn_169_my)=rownames(m_c2sam)
+# colnames(m_rn_169_op1)=rownames(m_c2sam)
+# colnames(m_rn_169_op2)=rownames(m_c2sam)
+# 
+# # 169种起手牌，己方和对手起手牌各运行30w次，耗时1.173 hours
+# saveRDS(m_rn_169_my,'data/m_rn_169_my_2w_0302.RData')
+# saveRDS(m_rn_169_op1,'data/m_rn_169_op1_2w_0302.RData')
+# saveRDS(m_rn_169_op2,'data/m_rn_169_op2_2w_0302.RData')
+# 
+# # 13x13 matrix for 3 people's 169's wp-------------------------------------
+# v_wp_my=vector('integer',169)
+# for(i in 1:169){
+#   j=m_c5[m_rn_169_my[,i],7]
+#   k1=m_c5[m_rn_169_op1[,i],7]
+#   k2=m_c5[m_rn_169_op2[,i],7]
+#   
+#   win=sum((j<k1)&(j<k2))
+#   los=sum((j>k1)|(j>k2))
+#   
+#   
+#   v_wp_my[i]=100-round(100*los/N,1)
+# }
+# 
+# m_p2_13x13=diag(v_wp_my[1:13],13,13)
+# m_p2_13x13[lower.tri(m_p2_13x13)]=v_wp_my[14:91]
+# m_p2_13x13=t(m_p2_13x13)
+# m_p2_13x13[lower.tri(m_p2_13x13)]=v_wp_my[92:169]
+# rownames(m_p2_13x13)=c('A','K','Q','J','T',9:2)
+# colnames(m_p2_13x13)=c('A','K','Q','J','T',9:2)
+# 
+# write.csv(m_p2_13x13,'data/m_p3_13x13_2w_0302.csv')

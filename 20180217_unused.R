@@ -156,9 +156,6 @@ rm(brg,brg1,brg2,brg3,i,j)
 #           
 # all(m_c5_1==m_c5[,1:5])
 # 
-# 
-# 
-# 
 # write.csv(m_c5[,1:5],'m_c5.csv',row.names=F)
 
 # 已知各自的起手牌，pre_flop阶段，求各自胜率 ------------------------------
@@ -599,24 +596,13 @@ seq5in7=function(hd2,bd5){
 # ---------------20180227---------------
 
 
-# program test and validation -----------------------------------------
-# 1. 验证match_mc5，通过
-j=vector('logical',nrow(m_c5))
-system.time(for(i in 1:nrow(m_c5)){
-  # stopifnot(i==match_mc5(m_c5[i,1:5]))# 32.62 seconds
-  j[i]=(i==match_mc5(m_c5[i,1:5]))# 17.15 seconds
-})
-all(j)
 
-N=10000
-m=matrix(nr=N,nc=7)
-for(i in 1:N)
-  m[i,]=sample(1:52,7)
 
-system.time(for(i in 1:N) # about 1.3s
-  seq5in7(m[i,1:2],m[i,3:7]))
 
-m=t(combn(13,7))
-n=matrix(nr=nrow(m),nc=5)
-for(i in 1:nrow(m))
-  n[i,]=seq5in7(m[i,1:2],m[i,3:7])
+
+
+
+
+
+
+

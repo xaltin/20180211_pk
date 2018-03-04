@@ -1,6 +1,7 @@
 # 已知各自的起手牌，pre_flop阶段，求各自胜率 ------------------------------
 n=sort(unique(as.vector(m_c2sam[,1:2])))
 
+# m_c2sam中共26张
 m_p26in5=matrix(0L,nr=249900,nc=26)# 每张牌在m_c5中的哪一行出现
 for(j in 1:26)# 每张牌在m_c5中的哪一行、列出现过（只保留行标）
   m_p26in5[,j]=which(m_c5[,1:5]==n[j],arr.ind=T)[,1]
