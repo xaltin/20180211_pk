@@ -1,4 +1,51 @@
-# 已知各自的起手牌，pre_flop阶段，求各自胜率 ------------------------------
+# 2.已知各自的起手牌，pre_flop阶段，求各自胜率 ------------------------------
+# v_my2=sample(v_52,2)
+# v_op2_1=sample(v_52[-v_my2],2)
+# v_my2=c(1,2)#win:37210,draw:1637884,lost:37210
+# v_op2_1=c(3,4)#同上
+# v_my2=c(5,9)#win:122556,draw:1467192,lost:122556
+# v_op2_1=c(6,10)#同上
+# v_my2=c(5,10)#win:12672,draw:1686960,lost:12672
+# v_op2_1=c(6,9)#同上
+
+v_52=1:52
+m_bd5=t(combn(v_52[-c(v_my2,v_op2_1)],5))
+
+# apply() 4.3mins, for() 3.5mins
+v_my2_in5=vector('integer',nrow(m_bd5))
+tt=Sys.time()
+for(i in 1:nrow(m_bd5)) v_my2_in5[i]=seq5in7(v_my2,m_bd5[i,])
+Sys.time()-tt
+
+v_op2_1_in5=vector('integer',nrow(m_bd5))
+tt=Sys.time()
+for(i in 1:nrow(m_bd5)) v_op2_1_in5[i]=seq5in7(v_op2_1,m_bd5[i,])
+Sys.time()-tt
+
+v_my2_in5_rk=m_c5[v_my2_in5,7]
+v_op2_1_in5_rk=m_c5[v_op2_1_in5,7]
+
+sum(v_my2_in5_rk<v_op2_1_in5_rk)
+sum(v_my2_in5_rk==v_op2_1_in5_rk)
+sum(v_my2_in5_rk>v_op2_1_in5_rk)
+sum(v_my2_in5_rk<v_op2_1_in5_rk)/nrow(m_bd5)
+sum(v_my2_in5_rk==v_op2_1_in5_rk)/nrow(m_bd5)
+sum(v_my2_in5_rk>v_op2_1_in5_rk)/nrow(m_bd5)
+
+
+ceiling(v_my2/4)
+ceiling(v_op2_1/4)
+
+
+
+
+
+
+
+
+
+
+# 1.已知各自的起手牌，pre_flop阶段，求各自胜率 ------------------------------
 n=sort(unique(as.vector(m_c2sam[,1:2])))
 
 # m_c2sam中共26张
@@ -80,123 +127,6 @@ i1_300=apply(i1_300, 2, unique)
 i1_300=do.call(cbind,i1_300)
 
 
-
-
-
-
-# tag ---------------------------------------------------------------------
-i=m_c5[,1:2]
-j=data.frame(table(i[,2],i[,1]))
-
-
-
-
-
-
-
-# 1.将m_c2lite的因子加入到d_wp_my
-# 2.按照每种类型（9列）对169种m_c2lite进行绘图，根据因子进行着色
-# 3.
-
-
-d_wp_my_pct=d_wp_my[,2:10]*100/N
-rownames(d_wp_my_pct)=d_wp_my$name
-
-d_wp_my_odd=round(N/d_wp_my[,2:10],2)
-rownames(d_wp_my_odd)=d_wp_my$name
-
-
-
-
-d_c5stat$tp_5in7_cnt=colSums(d_wp_my[,2:10])
-d_c5stat$tp_5in7_pct=d_c5stat$tp_5in7_cnt*100/(169*N)
-d_c5stat$tp_5in7_odd=round(169*N/d_c5stat$tp_5in7_cnt,2)
-
-
-
-# 1.monte'carlo for m_c2's winning probability ----------------------
-v_52=1:52
-N=1000
-# v_oper=1# 暂未使用
-v_op2=vector('integer',2)# 对手2张手牌
-v_bd5=vector('integer',5)# 对手2张手牌
-
-m_my=matrix(nr=N,nc=12)
-m_op=matrix(nr=N,nc=12)
-
-for(i in 1:nrow(m_c2)){
-  
-  tt=Sys.time()
-  v_my2=m_c2[i,1:2]# 己方2张手牌
-  for(j in 1:N){
-    v_op2=sample(v_52[-v_my2],2)# 对手2张手牌
-    v_bd5=sample(v_52[-c(v_my2,v_op2)],5)# 5张公共牌
-    
-    v_my5=seq5in7(v_my2,v_bd5)
-    v_op5=seq5in7(v_op2,v_bd5)
-    
-    m_my[j,]=d_pk$name[c(v_my2,v_bd5,v_my5)]
-    m_op[j,]=d_pk$name[c(v_op2,v_bd5,v_op5)]
-  }# for 2
-  Sys.time()-tt
-  
-}#for 1
-
-
-# 2.monte'carlo for m_c2's winning probability -----------------------
-v_52=1:52
-N=10000
-# v_oper=1# 暂未使用
-v_my2=vector('integer',2)# 己方2张手牌
-v_op2=vector('integer',2)# 对手2张手牌
-v_bd5=vector('integer',5)# 5张公共牌
-v_my5=vector('integer',5)# 己方5张成牌
-v_op5=vector('integer',5)# 对手5张手牌
-
-m_test=matrix(nr=N,nc=2+5+2+2+2)
-
-tt=Sys.time()
-v_my2=as.vector(m_c2[i,1:2])# 己方2张手牌,as.vector取消name
-for(j in 1:N){
-  v_op2=sample(v_52[-v_my2],2)# 对手2张手牌
-  v_bd5=sample(v_52[-c(v_my2,v_op2)],5)# 5张公共牌
-  
-  v_my5=seq5in7(v_my2,v_bd5)#1  2  4 34 35,2134
-  v_op5=seq5in7(v_op2,v_bd5)#4 13 19 34 35,798970
-  
-  v_myrank=m_c5[match_mc5(v_my5),6:7]
-  v_oprank=m_c5[match_mc5(v_op5),6:7]
-  
-  m_test[j,]=c(v_my2,v_bd5,v_op2,v_myrank,v_oprank)
-  
-}# for 2
-Sys.time()-tt
-
-colnames(m_test)=1:13
-
-w_win=sum(m_test[,11]<m_test[,13])/N
-w_equal=sum(m_test[,11]==m_test[,13])/N
-w_lost=1-w_win-w_equal
-
-
-
-
-
-m11=m_c5[1:249900,1:5]
-m12=m11[1:19600,]
-m13=m12[1:1176,]
-
-c12=data.frame(table(m11[,2]))
-c13=data.frame(table(m12[,3]))
-c14=data.frame(table(m13[,4]))
-
-m21=m_c5[249900+1:230300,1:5]
-m22=m21[1:18424,]
-m23=m22[1:1128,]
-
-c22=data.frame(table(m21[,2]))
-c23=data.frame(table(m22[,3]))
-c24=data.frame(table(m23[,4]))
 
 
 

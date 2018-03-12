@@ -157,6 +157,72 @@ system.time({
 })
 ```
 
+13. for比apply快，下面的例子apply 4.3mins，for 3.5mins
+```{r}
+tt=Sys.time()
+v_my2_in5=apply(m_bd5,1,function(x) seq5in7(v_my2,x))
+Sys.time()-tt
+
+v_my2_in5=vector('integer',nrow(m_bd5))
+tt=Sys.time()
+for(i in 1:nrow(m_bd5)) v_my2_in5[i]=seq5in7(v_my2,m_bd5[i,])
+Sys.time()-tt
+```
+
+
+14. 空间换时间，新的排序方法快数倍
+```{r}
+system.time({
+  for(i in 1:100000){
+    sort.int(sample(52,5),method='shell')
+  }
+})
+system.time({
+  for(i in 1:100000){
+    sort.int(sample(52,7),method='shell')
+  }
+})
+system.time({
+  for(i in 1:100000){
+    sort.int(sample(52,7),method='quick')
+  }
+})
+system.time({
+  for(i in 1:100000){
+    sort.int(sample(52,7),method='radix')
+  }
+})
+system.time({
+  for(i in 1:100000){
+    sort.int(sample(52,7),method='auto')
+  }
+})
+system.time({
+  for(i in 1:100000){
+    sort(sample(52,7))
+  }
+})
+
+
+m413=matrix(0L,nr=4,nc=13)
+system.time({
+  for(i in 1:100000){
+    m413[]=0L
+    m413[sample(52,7)]=1L
+    j=which(m413==1L)
+  }
+})
+
+j=vector("integer",52)#the No.1 fastest
+system.time({
+  for(i in 1:100000){
+    j[]=0L
+    j[sample(52,7)]=1L
+    k=which(j==1L)
+  }
+})
+```
+
 
 
 

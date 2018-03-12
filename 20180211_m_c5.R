@@ -162,11 +162,11 @@ m_c5id=cbind(c(table(m_c5[,1]),0,0,0,0),
              c(0,0,0,0,table(m_c5[1:48,5])))
 dimnames(m_c5id)=NULL
 
-# 1. 己方2张手牌的wp，耗时3.05 h(0228-3.05h)-------------------------------
-# v_52=1:52
-# # N=300000
+# 1. 己方2张手牌的wp，1个对手，耗时0.67 h(0312-0.67h)-------------------------------
 # N=10000# 30w与1w的百分率相差1.1以内，耗时6 mins
 # # 记录169种起手牌的9种牌型的出现次数，以及胜、平次数，运行169*2*30w=1.014亿次
+# v_52=1:52
+# N=300000
 # m_rn_169_my=matrix(nr=N,nc=169)
 # m_rn_169_op=matrix(nr=N,nc=169)
 # 
@@ -178,8 +178,8 @@ dimnames(m_c5id)=NULL
 #     v_op2=sample(v_52[-v_my2],2)# 对手2张手牌
 #     v_bd5=sample(v_52[-c(v_my2,v_op2)],5)# 5张公共牌
 # 
-#     m_rn_169_my[j,i]=seq5in7(v_my2,v_bd5)# 返回v_my5的行索引
-#     m_rn_169_op[j,i]=seq5in7(v_op2,v_bd5)# 返回v_op5的行索引
+#     m_rn_169_my[j,i]=seq5in7(c(v_my2,v_bd5))# 返回v_my5的行索引
+#     m_rn_169_op[j,i]=seq5in7(c(v_op2,v_bd5))# 返回v_op5的行索引
 #   }
 # }
 # Sys.time()-tt
@@ -187,35 +187,12 @@ dimnames(m_c5id)=NULL
 # colnames(m_rn_169_my)=rownames(m_c2sam)
 # colnames(m_rn_169_op)=rownames(m_c2sam)
 # 
-# # 169种起手牌，己方和对手起手牌各运行30w次，耗时3.05 hours
-# saveRDS(m_rn_169_my,'data/m_rn_169_my_30w_0228.RData')
-# saveRDS(m_rn_169_op,'data/m_rn_169_op_30w_0228.RData')
-
-
-# 2. 7张牌中各种牌型的出现概率，100m次，耗时2.84 h(0228-2.84h)----------------
-# v_52=1:52
-# N=100000000
-# v_rn_5=vector('integer',N)
-# # names(v_type_5in7)=c('rflush','four','house','flush','straight',
-# # 'three','tpair','pair','high')
-# 
-# tt=Sys.time()
-# for(i in 1:N){# for 2
-#   v_7=sample(v_52,7)# 随机7张牌
-#   v_rn_5[i]=seq5in7(v_7[1:2],v_7[3:7])#己方5张成牌
-# }
-# Sys.time()-tt
-# 
-# saveRDS(v_rn_5,'data/v_rn_5_100m_0228.RData')
+# saveRDS(m_rn_169_my,'data/m_rn_169_my_30w_0311.RData')
+# saveRDS(m_rn_169_op,'data/m_rn_169_op_30w_0311.RData')
 
 # readRDS -----------------------------------------------------------------
-# m_rn_169_my=readRDS('data/m_rn_169_my_30w.RData')
-# m_rn_169_op=readRDS('data/m_rn_169_op_30w.RData')
-# v_rn_5=readRDS('data/v_rn_5_100m.RData')
-
-m_rn_169_my=readRDS('data/m_rn_169_my_30w_0228.RData')
-m_rn_169_op=readRDS('data/m_rn_169_op_30w_0228.RData')
-v_rn_5=readRDS('data/v_rn_5_100m_0228.RData')
+# m_rn_169_my=readRDS('data/m_rn_169_my_30w_0311.RData')
+# m_rn_169_op=readRDS('data/m_rn_169_op_30w_0311.RData')
 
 ## 13x13 matrix for 2 people's 169's wp-------------------------------------
 # v_wp_my=vector('integer',169)
@@ -235,12 +212,10 @@ v_rn_5=readRDS('data/v_rn_5_100m_0228.RData')
 # 
 # write.csv(m_p2_13x13,'data/m_p2_13x13_30w.csv')
 
-# 3. 己方2张手牌的wp，2个对手，耗时3.24 h(0228-3.05h)------------------------
+# 2. 己方2张手牌的wp，2个对手，169*3*10w=5070w次耗时0.3 h(0312-0.3h)-----------
 # v_52=1:52
-# # N=300000
-# N=20000# 30w与1w的百分率相差1.1以内，耗时6 mins
-# # 记录169种起手牌的9种牌型的出现次数，以及胜、平次数，运行169*3*2w=1014w次
-# m_rn_169_my=matrix(nr=N,nc=169)
+# N=100000
+# m_rn_169_my3=matrix(nr=N,nc=169)
 # m_rn_169_op1=matrix(nr=N,nc=169)
 # m_rn_169_op2=matrix(nr=N,nc=169)
 # 
@@ -253,33 +228,37 @@ v_rn_5=readRDS('data/v_rn_5_100m_0228.RData')
 #     v_op22=sample(v_52[-c(v_my2,v_op12)],2)# 对手2的2张手牌
 #     v_bd5=sample(v_52[-c(v_my2,v_op12,v_op22)],5)# 5张公共牌
 # 
-#     m_rn_169_my[j,i]=seq5in7(v_my2,v_bd5)# 返回v_my5的行索引
-#     m_rn_169_op1[j,i]=seq5in7(v_op12,v_bd5)# 返回v_op5的行索引
-#     m_rn_169_op2[j,i]=seq5in7(v_op22,v_bd5)# 返回v_op5的行索引
+#     m_rn_169_my3[j,i]=seq5in7(c(v_my2,v_bd5))# 返回v_my5的行索引
+#     m_rn_169_op1[j,i]=seq5in7(c(v_op12,v_bd5))# 返回v_op5的行索引
+#     m_rn_169_op2[j,i]=seq5in7(c(v_op22,v_bd5))# 返回v_op5的行索引
 #   }
 # }
 # Sys.time()-tt
 # 
-# colnames(m_rn_169_my)=rownames(m_c2sam)
+# colnames(m_rn_169_my3)=rownames(m_c2sam)
 # colnames(m_rn_169_op1)=rownames(m_c2sam)
 # colnames(m_rn_169_op2)=rownames(m_c2sam)
 # 
-# # 169种起手牌，己方和对手起手牌各运行30w次，耗时1.173 hours
-# saveRDS(m_rn_169_my,'data/m_rn_169_my_2w_0302.RData')
-# saveRDS(m_rn_169_op1,'data/m_rn_169_op1_2w_0302.RData')
-# saveRDS(m_rn_169_op2,'data/m_rn_169_op2_2w_0302.RData')
-# 
+# saveRDS(m_rn_169_my3,'data/m_rn_169_my3_10w_0312.RData')
+# saveRDS(m_rn_169_op1,'data/m_rn_169_op1_10w_0312.RData')
+# saveRDS(m_rn_169_op2,'data/m_rn_169_op2_10w_0312.RData')
+
+# readRDS -----------------------------------------------------------------
+# m_rn_169_my3=readRDS('data/m_rn_169_my3_10w_0312.RData')
+# m_rn_169_op1=readRDS('data/m_rn_169_op1_10w_0312.RData')
+# m_rn_169_op2=readRDS('data/m_rn_169_op2_10w_0312.RData')
+
 # # 13x13 matrix for 3 people's 169's wp-------------------------------------
 # v_wp_my=vector('integer',169)
 # for(i in 1:169){
-#   j=m_c5[m_rn_169_my[,i],7]
+#   j=m_c5[m_rn_169_my3[,i],7]
 #   k1=m_c5[m_rn_169_op1[,i],7]
 #   k2=m_c5[m_rn_169_op2[,i],7]
-#   
+# 
 #   win=sum((j<k1)&(j<k2))
 #   los=sum((j>k1)|(j>k2))
-#   
-#   
+# 
+# 
 #   v_wp_my[i]=100-round(100*los/N,1)
 # }
 # 
@@ -290,4 +269,74 @@ v_rn_5=readRDS('data/v_rn_5_100m_0228.RData')
 # rownames(m_p2_13x13)=c('A','K','Q','J','T',9:2)
 # colnames(m_p2_13x13)=c('A','K','Q','J','T',9:2)
 # 
-# write.csv(m_p2_13x13,'data/m_p3_13x13_2w_0302.csv')
+# write.csv(m_p2_13x13,'data/m_p3_13x13_10w_0312.csv')
+
+# 3. 1person,7张牌中各种牌型的出现概率，100m次，耗时0.63 h(0312-0.63h)----------
+# v_52=1:52
+# N=100000000
+# v_rn_5=vector('integer',N)
+# 
+# tt=Sys.time()
+# for(i in 1:N){# for 2
+#   v_7=sample(v_52,7)# 随机7张牌
+#   v_rn_5[i]=seq5in7(v_7)#己方5张成牌
+# }
+# Sys.time()-tt
+# 
+# saveRDS(v_rn_5,'data/v_rn_5_100m_0311.RData')
+
+# 4. 2person,7张牌中各种牌型的出现概率，100m次，耗时1.26 h(0312-1.26h)-----------
+# v_52=1:52
+# N=100000000
+# v_rn_5_1=vector('integer',N)
+# v_rn_5_2=vector('integer',N)
+# 
+# tt=Sys.time()
+# for(i in 1:N){
+#   v_my2=sample(52,2)
+#   v_op2=sample(v_52[-v_my2],2)
+#   v_bd5=sample(v_52[-c(v_my2,v_op2)],5)
+#   v_rn_5_1[i]=seq5in7(c(v_my2,v_bd5))#己方5张成牌
+#   v_rn_5_2[i]=seq5in7(c(v_op2,v_bd5))#己方5张成牌
+# }
+# Sys.time()-tt
+# 
+# saveRDS(v_rn_5_1,'data/v_rn_5_100m_0311_p2_1.RData')
+# saveRDS(v_rn_5_2,'data/v_rn_5_100m_0311_p2_2.RData')
+
+# 5. 3person,7张牌中各种牌型的出现概率，50m次，耗时1.05 h(0312-1.05h)-----------
+# v_52=1:52
+# N=50000000
+# v_rn_5_31=vector('integer',N)
+# v_rn_5_32=vector('integer',N)
+# v_rn_5_33=vector('integer',N)
+# 
+# tt=Sys.time()
+# for(i in 1:N){
+#   v_my2=sample(52,2)
+#   v_op1=sample(v_52[-v_my2],2)
+#   v_op2=sample(v_52[-c(v_my2,v_op1)],2)
+#   
+#   v_bd5=sample(v_52[-c(v_my2,v_op1,v_op2)],5)
+#   v_rn_5_31[i]=seq5in7(c(v_my2,v_bd5))#己方5张成牌
+#   v_rn_5_32[i]=seq5in7(c(v_op1,v_bd5))#己方5张成牌
+#   v_rn_5_33[i]=seq5in7(c(v_op2,v_bd5))#己方5张成牌
+# }
+# Sys.time()-tt
+# 
+# saveRDS(v_rn_5_31,'data/v_rn_5_50m_0311_p3_31.RData')
+# saveRDS(v_rn_5_32,'data/v_rn_5_50m_0311_p3_32.RData')
+# saveRDS(v_rn_5_33,'data/v_rn_5_50m_0311_p3_33.RData')
+
+# readRDS -----------------------------------------------------------------
+v_rn_5=readRDS('data/v_rn_5_100m_0311.RData')
+v_rn_5_1=readRDS('data/v_rn_5_100m_0311_p2_1.RData')
+v_rn_5_2=readRDS('data/v_rn_5_100m_0311_p2_2.RData')
+v_rn_5_31=readRDS('data/v_rn_5_50m_0311_p3_31.RData')
+v_rn_5_32=readRDS('data/v_rn_5_50m_0311_p3_32.RData')
+v_rn_5_33=readRDS('data/v_rn_5_50m_0311_p3_33.RData')
+
+
+
+
+
