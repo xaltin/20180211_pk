@@ -7,7 +7,7 @@ match_mc5=function(id){
         sum(m_c5id[i[5]:j[5],5]))[flag])+1
 }
 
-# seq5in7-20180311 快5.5倍，6.1w/s-----------------------------------------
+# seq5in7-20180311 快6.1倍，6.1w/s-----------------------------------------
 pface=rep(1:13,each=4)
 psuit=rep(1:4,13)
 v7fa=vector('integer',7)# face
@@ -16,7 +16,7 @@ v7cn=vector('integer',7)# face的count
 v7id=vector('integer',7)# unique face的id
 
 seq5in7=function(v7){
-  v7=.Internal(sort(v7,F))
+  v7=.Internal(sort(v7,F))# shell sort, the fastest
   
   v7fa=pface[v7]
   v7su=psuit[v7]
@@ -287,7 +287,7 @@ seq5in7=function(v7){
 # }
 
 
-# 查找5维数组 ------------------------------------------------------------------
+# 查找5维数组(虽然速度快，但瓶颈在seq5in7)-------------------------------------------------
 # a_5type=array(0L,dim=c(48,52,52,52,52))
 # a_5rank=array(0L,dim=c(48,52,52,52,52))
 # n=1
@@ -308,15 +308,16 @@ seq5in7=function(v7){
 # (length(a_5rank)-length(which(a_5type==0)))/length(a_5rank)#0.00740534
 # 
 # 
-# # 查找速度快
-# i=1:5
-# i=c(1:4,16)
+# 查找速度快
+
 # system.time({#0.15s
 #   for(j in 1:1000000)
-#     a_5[i[1],i[2],i[3],i[4],i[5]]
+#     i=.Internal(sort(sample(52,5),F))
+#     a_5rank[i[1],i[2],i[3],i[4],i[5]]
 # })
 # system.time({#5.46s
 #   for(j in 1:1000000)
+#     i=.Internal(sort(sample(52,5),F))
 #     match_mc5(i)
 # })
 # 

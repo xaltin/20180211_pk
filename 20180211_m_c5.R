@@ -336,7 +336,41 @@ v_rn_5_31=readRDS('data/v_rn_5_50m_0311_p3_31.RData')
 v_rn_5_32=readRDS('data/v_rn_5_50m_0311_p3_32.RData')
 v_rn_5_33=readRDS('data/v_rn_5_50m_0311_p3_33.RData')
 
+df_v_rn_5=data.frame(table(m_c5[v_rn_5,6]))
+df_v_rn_5_1=data.frame(table(m_c5[v_rn_5_1,6]))
+df_v_rn_5_2=data.frame(table(m_c5[v_rn_5_2,6]))
+df_v_rn_5_31=data.frame(table(m_c5[v_rn_5_31,6]))
+df_v_rn_5_32=data.frame(table(m_c5[v_rn_5_32,6]))
+df_v_rn_5_33=data.frame(table(m_c5[v_rn_5_33,6]))
 
+df_123p_stat=cbind(df_v_rn_5,df_v_rn_5_1$Freq,df_v_rn_5_2$Freq,
+                   df_v_rn_5_31$Freq,df_v_rn_5_32$Freq,df_v_rn_5_33$Freq)
+rm(df_v_rn_5,df_v_rn_5_1,df_v_rn_5_2,df_v_rn_5_31,df_v_rn_5_32,df_v_rn_5_33)
+
+# 无论1/2/3人，个人成牌概率不随人数而变化
+df_123p_stat=cbind(df_123p_stat[,1],
+                   apply(df_123p_stat[,2:7],2,function(x) 100*round(x/sum(x),4)))
+
+# p2的最终成牌统计
+i=which(m_c5[v_rn_5_1,6]<m_c5[v_rn_5_2,6])#length(i)=30759652
+j=which(m_c5[v_rn_5_1,6]==m_c5[v_rn_5_2,6])#length(j)=38485339,p2=100m-i-j=30755009
+k=c(m_c5[v_rn_5_1,6][i],m_c5[v_rn_5_2,6][-i])
+l=data.frame(table(k))
+l=100*round(l$Freq/sum(l$Freq),4)
+
+i=(m_c5[v_rn_5_31,6]<m_c5[v_rn_5_32,6])
+j=(m_c5[v_rn_5_31,6]<m_c5[v_rn_5_33,6])
+k=(m_c5[v_rn_5_32,6]<m_c5[v_rn_5_33,6])
+
+l=data.frame(table(k))
+l=100*round(l$Freq/sum(l$Freq),4)
+c(m_c5[v_rn_5_31,6][(i&j)],
+  m_c5[v_rn_5_33,6][((!j)&(!k))],
+  m_c5[v_rn_5_32,6][((!i)&(k))])
+1565206660811v_rn_5,6]))
+# d_c5stat$m100=v_rn_5_type_tbl[,2]
+# d_c5stat$m100_pct=round(100*d_c5stat$m100/sum(d_c5stat$m100),3)
+# d_c5stat$m100_pct_ratio=round(d_c5stat$m100_pct/d_c5stat$pct,2)
 
 
 
