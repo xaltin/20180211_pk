@@ -352,25 +352,21 @@ df_123p_stat=cbind(df_123p_stat[,1],
                    apply(df_123p_stat[,2:7],2,function(x) 100*round(x/sum(x),4)))
 
 # p2的最终成牌统计
-i=which(m_c5[v_rn_5_1,6]<m_c5[v_rn_5_2,6])#length(i)=30759652
-j=which(m_c5[v_rn_5_1,6]==m_c5[v_rn_5_2,6])#length(j)=38485339,p2=100m-i-j=30755009
-k=c(m_c5[v_rn_5_1,6][i],m_c5[v_rn_5_2,6][-i])
-l=data.frame(table(k))
-l=100*round(l$Freq/sum(l$Freq),4)
+i=data.frame(table(apply(cbind(m_c5[v_rn_5_1,6],m_c5[v_rn_5_2,6]),1,min)))
+v_p2_stat=100*round(i$Freq/sum(i$Freq),4)
 
-i=(m_c5[v_rn_5_31,6]<m_c5[v_rn_5_32,6])
-j=(m_c5[v_rn_5_31,6]<m_c5[v_rn_5_33,6])
-k=(m_c5[v_rn_5_32,6]<m_c5[v_rn_5_33,6])
+# p3的最终成牌统计
+i=data.frame(table(apply(cbind(m_c5[v_rn_5_31,6],m_c5[v_rn_5_32,6],m_c5[v_rn_5_33,6]),1,min)))
+v_p3_stat=100*round(i$Freq/sum(i$Freq),4)
 
-l=data.frame(table(k))
-l=100*round(l$Freq/sum(l$Freq),4)
-c(m_c5[v_rn_5_31,6][(i&j)],
-  m_c5[v_rn_5_33,6][((!j)&(!k))],
-  m_c5[v_rn_5_32,6][((!i)&(k))])
-1565206660811v_rn_5,6]))
-# d_c5stat$m100=v_rn_5_type_tbl[,2]
-# d_c5stat$m100_pct=round(100*d_c5stat$m100/sum(d_c5stat$m100),3)
-# d_c5stat$m100_pct_ratio=round(d_c5stat$m100_pct/d_c5stat$pct,2)
+# 人数不同，最终的整体成牌概率发生变化
+df_123p_stat=cbind(df_123p_stat[,-2],df_123p_stat[,2],v_p2_stat,v_p3_stat)
+d_c7stat=cbind(df_123p_stat,cumsum(df_123p_stat[,7]),
+                   cumsum(df_123p_stat[,8]),cumsum(df_123p_stat[,9]))
+colnames(d_c7stat)=c('type','p2_1','p2_2','p3_1','p3_2','p3_3',
+                     'p1stat','p2stat','p3stat','p1cum','p2cum','p3cum')
+rm(df_123p_stat,v_p2_stat,v_p3_stat,i)
+
 
 
 
