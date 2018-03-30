@@ -1,47 +1,75 @@
-# 2.已知各自的起手牌，pre_flop阶段，求各自胜率 ------------------------------
-# v_my2=sample(v_52,2)
-# v_op2_1=sample(v_52[-v_my2],2)
-# v_my2=c(1,2)#win:37210,draw:1637884,lost:37210
-# v_op2_1=c(3,4)#同上
-# v_my2=c(5,9)#win:122556,draw:1467192,lost:122556
-# v_op2_1=c(6,10)#同上
-# v_my2=c(5,10)#win:12672,draw:1686960,lost:12672
-# v_op2_1=c(6,9)#同上
+# 3.已知各自的起手牌，pre_flop阶段，求各自胜率 ------------------------------
+m_p2win=matrix(0L,nr=choose(169,2),nc=2)
+m_bd5=t(combn(48,5))
+v_id71=vector('integer',nrow(bd5))
+v_id72=vector('integer',nrow(bd5))
+n=1
+for(i in 1:19){
+  v_p1=m_c2sam[i,1:2]
+  for(j in (i+1):20){
+    v_p2=m_c2sam[j,1:2]
+    bd5=matrix(v_52[-c(v_p1,v_p2)][m_bd5],nc=5)
+    
+    for(k in 1:nrow(bd5)){
+      v_id71[k]=match_mc7(.Internal(qsort(c(v_p1,bd5[k,]),F)))
+      v_id72[k]=match_mc7(.Internal(qsort(c(v_p2,bd5[k,]),F)))
+    } 
+    
+    i1=m_c5[v_c7[v_id71],7]
+    i2=m_c5[v_c7[v_id72],7]
+    m_p2win[n,1]=sum(i1<i2)
+    m_p2win[n,2]=sum(i1==i2)
+    n=n+1
+  }
+}
 
-v_52=1:52
-m_bd5=t(combn(v_52[-c(v_my2,v_op2_1)],5))
 
-# apply() 4.3mins, for() 3.5mins
-v_my2_in5=vector('integer',nrow(m_bd5))
+f_p2win=function(x){
+  m_p2win=matrix(0L,nr=choose(169,2),nc=2)
+  m_bd5=t(combn(48,5))
+  v_id71=vector('integer',nrow(bd5))
+  v_id72=vector('integer',nrow(bd5))
+  n=1
+  for(i in 1:(nrow(x)-1)){
+    v_p1=x[i,]
+    for(j in (i+1):nrow(x)){
+      v_p2=x[j,]
+      bd5=matrix(v_52[-c(v_p1,v_p2)][m_bd5],nc=5)
+      
+      for(k in 1:nrow(bd5)){
+        v_id71[k]=match_mc7(.Internal(qsort(c(v_p1,bd5[k,]),F)))
+        v_id72[k]=match_mc7(.Internal(qsort(c(v_p2,bd5[k,]),F)))
+      } 
+      
+      i1=m_c5[v_c7[v_id71],7]
+      i2=m_c5[v_c7[v_id72],7]
+      m_p2win[n,1]=sum(i1<i2)
+      m_p2win[n,2]=sum(i1==i2)
+      n=n+1
+    }
+  }
+}
+
+
+library(foreach)
+# 启用parallel作为foreach并行计算的后端
+library(doParallel)
+func=function(x){
+  return (x+1);
+}
+cl <- makeCluster(4)
+registerDoParallel(cl)
+# 并行计算方式
 tt=Sys.time()
-for(i in 1:nrow(m_bd5)) v_my2_in5[i]=seq5in7(v_my2,m_bd5[i,])
+x <- foreach(x=matrix(1:100,nc=2),.combine='rbind') %dopar% func(x)
 Sys.time()-tt
-
-v_op2_1_in5=vector('integer',nrow(m_bd5))
-tt=Sys.time()
-for(i in 1:nrow(m_bd5)) v_op2_1_in5[i]=seq5in7(v_op2_1,m_bd5[i,])
-Sys.time()-tt
-
-v_my2_in5_rk=m_c5[v_my2_in5,7]
-v_op2_1_in5_rk=m_c5[v_op2_1_in5,7]
-
-sum(v_my2_in5_rk<v_op2_1_in5_rk)
-sum(v_my2_in5_rk==v_op2_1_in5_rk)
-sum(v_my2_in5_rk>v_op2_1_in5_rk)
-sum(v_my2_in5_rk<v_op2_1_in5_rk)/nrow(m_bd5)
-sum(v_my2_in5_rk==v_op2_1_in5_rk)/nrow(m_bd5)
-sum(v_my2_in5_rk>v_op2_1_in5_rk)/nrow(m_bd5)
+stopCluster(cl)
 
 
-ceiling(v_my2/4)
-ceiling(v_op2_1/4)
-
-
-
-
-
-
-
+m_p2win[1:6,1]/1712304
+m_p2win[1:6,2]/1712304
+1-(m_p2win[1:6,1]/1712304+m_p2win[1:6,2]/1712304)
+100*(m_p2win[1:6,1]/1712304+m_p2win[1:6,2]/1712304/2)
 
 
 

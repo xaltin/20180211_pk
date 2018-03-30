@@ -328,45 +328,101 @@ dimnames(m_c5id)=NULL
 # saveRDS(v_rn_5_32,'data/v_rn_5_50m_0311_p3_32.RData')
 # saveRDS(v_rn_5_33,'data/v_rn_5_50m_0311_p3_33.RData')
 
-# readRDS -----------------------------------------------------------------
-v_rn_5=readRDS('data/v_rn_5_100m_0311.RData')
-v_rn_5_1=readRDS('data/v_rn_5_100m_0311_p2_1.RData')
-v_rn_5_2=readRDS('data/v_rn_5_100m_0311_p2_2.RData')
-v_rn_5_31=readRDS('data/v_rn_5_50m_0311_p3_31.RData')
-v_rn_5_32=readRDS('data/v_rn_5_50m_0311_p3_32.RData')
-v_rn_5_33=readRDS('data/v_rn_5_50m_0311_p3_33.RData')
+# # readRDS，对p1/p2/p3成牌概率进行统计--------------------------------------
+# v_rn_5=readRDS('data/v_rn_5_100m_0311.RData')
+# v_rn_5_1=readRDS('data/v_rn_5_100m_0311_p2_1.RData')
+# v_rn_5_2=readRDS('data/v_rn_5_100m_0311_p2_2.RData')
+# v_rn_5_31=readRDS('data/v_rn_5_50m_0311_p3_31.RData')
+# v_rn_5_32=readRDS('data/v_rn_5_50m_0311_p3_32.RData')
+# v_rn_5_33=readRDS('data/v_rn_5_50m_0311_p3_33.RData')
+# 
+# df_v_rn_5=data.frame(table(m_c5[v_rn_5,6]))
+# df_v_rn_5_1=data.frame(table(m_c5[v_rn_5_1,6]))
+# df_v_rn_5_2=data.frame(table(m_c5[v_rn_5_2,6]))
+# df_v_rn_5_31=data.frame(table(m_c5[v_rn_5_31,6]))
+# df_v_rn_5_32=data.frame(table(m_c5[v_rn_5_32,6]))
+# df_v_rn_5_33=data.frame(table(m_c5[v_rn_5_33,6]))
+# 
+# df_123p_stat=cbind(df_v_rn_5,df_v_rn_5_1$Freq,df_v_rn_5_2$Freq,
+#                    df_v_rn_5_31$Freq,df_v_rn_5_32$Freq,df_v_rn_5_33$Freq)
+# rm(df_v_rn_5,df_v_rn_5_1,df_v_rn_5_2,df_v_rn_5_31,df_v_rn_5_32,df_v_rn_5_33)
+# 
+# # 无论1/2/3人，个人成牌概率不随人数而变化
+# df_123p_stat=cbind(df_123p_stat[,1],
+#                    apply(df_123p_stat[,2:7],2,function(x) 100*round(x/sum(x),4)))
+# 
+# # p2的最终成牌统计
+# i=data.frame(table(apply(cbind(m_c5[v_rn_5_1,6],m_c5[v_rn_5_2,6]),1,min)))
+# v_p2_stat=100*round(i$Freq/sum(i$Freq),4)
+# 
+# # p3的最终成牌统计
+# i=data.frame(table(apply(cbind(m_c5[v_rn_5_31,6],m_c5[v_rn_5_32,6],m_c5[v_rn_5_33,6]),1,min)))
+# v_p3_stat=100*round(i$Freq/sum(i$Freq),4)
+# 
+# # 人数不同，最终的整体成牌概率发生变化
+# df_123p_stat=cbind(df_123p_stat[,-2],df_123p_stat[,2],v_p2_stat,v_p3_stat)
+# d_c7stat=cbind(df_123p_stat,cumsum(df_123p_stat[,7]),
+#                    cumsum(df_123p_stat[,8]),cumsum(df_123p_stat[,9]))
+# colnames(d_c7stat)=c('type','p2_1','p2_2','p3_1','p3_2','p3_3',
+#                      'p1stat','p2stat','p3stat','p1cum','p2cum','p3cum')
+# rm(df_123p_stat,v_p2_stat,v_p3_stat,i)
+# 
+# saveRDS(d_c7stat,'data/d_c7stat.RData')
 
-df_v_rn_5=data.frame(table(m_c5[v_rn_5,6]))
-df_v_rn_5_1=data.frame(table(m_c5[v_rn_5_1,6]))
-df_v_rn_5_2=data.frame(table(m_c5[v_rn_5_2,6]))
-df_v_rn_5_31=data.frame(table(m_c5[v_rn_5_31,6]))
-df_v_rn_5_32=data.frame(table(m_c5[v_rn_5_32,6]))
-df_v_rn_5_33=data.frame(table(m_c5[v_rn_5_33,6]))
+# readRDS d_c7stat---------------------------------------------------------
+d_c7stat=readRDS('data/d_c7stat.RData')
 
-df_123p_stat=cbind(df_v_rn_5,df_v_rn_5_1$Freq,df_v_rn_5_2$Freq,
-                   df_v_rn_5_31$Freq,df_v_rn_5_32$Freq,df_v_rn_5_33$Freq)
-rm(df_v_rn_5,df_v_rn_5_1,df_v_rn_5_2,df_v_rn_5_31,df_v_rn_5_32,df_v_rn_5_33)
+# readRDS m_c7-------------------------------------------------------------
+# m_c7=t(combn(52,7))
+# saveRDS(m_c7,'data/m_c7.RData')
+# m_c7=readRDS('data/m_c7.RData')
+# m_c7id ------------------------------------------------------------------
+# m_c7id=cbind(c(table(m_c7[,1]),0,0,0,0,0,0),
+#              c(0,table(m_c7[1:18009460,2]),0,0,0,0,0),
+#              c(0,0,table(m_c7[1:2118760,3]),0,0,0,0),
+#              c(0,0,0,table(m_c7[1:211876,4]),0,0,0),
+#              c(0,0,0,0,table(m_c7[1:17296,5]),0,0),
+#              c(0,0,0,0,0,table(m_c7[1:1081,6]),0),
+#              c(0,0,0,0,0,0,table(m_c7[1:46,7])))
+# dimnames(m_c7id)=NULL
+# saveRDS(m_c7id,'data/m_c7id.RData')
+m_c7id=readRDS('data/m_c7id.RData')
+m_c7idcum=apply(m_c7id, 2, cumsum)
 
-# 无论1/2/3人，个人成牌概率不随人数而变化
-df_123p_stat=cbind(df_123p_stat[,1],
-                   apply(df_123p_stat[,2:7],2,function(x) 100*round(x/sum(x),4)))
+# time consumed 36 mins
+# v_c7=vector('integer',nrow(m_c7))
+# tt=Sys.time()
+# for(i in 1:nrow(m_c7)) v_c7[i]=seq5in7(m_c7[i,])
+# Sys.time()-tt
+# saveRDS(v_c7,'data/v_c7.RData')
 
-# p2的最终成牌统计
-i=data.frame(table(apply(cbind(m_c5[v_rn_5_1,6],m_c5[v_rn_5_2,6]),1,min)))
-v_p2_stat=100*round(i$Freq/sum(i$Freq),4)
+v_c7=readRDS('data/v_c7.RData')
+# d_v_c7=data.frame(table(v_c7))
+v_c7uni=sort(unique(v_c7))#length=1148466
 
-# p3的最终成牌统计
-i=data.frame(table(apply(cbind(m_c5[v_rn_5_31,6],m_c5[v_rn_5_32,6],m_c5[v_rn_5_33,6]),1,min)))
-v_p3_stat=100*round(i$Freq/sum(i$Freq),4)
+m_c5abs=m_c5[v_c7uni,]
 
-# 人数不同，最终的整体成牌概率发生变化
-df_123p_stat=cbind(df_123p_stat[,-2],df_123p_stat[,2],v_p2_stat,v_p3_stat)
-d_c7stat=cbind(df_123p_stat,cumsum(df_123p_stat[,7]),
-                   cumsum(df_123p_stat[,8]),cumsum(df_123p_stat[,9]))
-colnames(d_c7stat)=c('type','p2_1','p2_2','p3_1','p3_2','p3_3',
-                     'p1stat','p2stat','p3stat','p1cum','p2cum','p3cum')
-rm(df_123p_stat,v_p2_stat,v_p3_stat,i)
+length(unique(m_c5abs[,7]))#4872，m_c5为7462
 
+l_c5abs=tapply(m_c5abs[,7],m_c5abs[,6],table)
+lapply(l_c5abs, length)
+lapply(l_c5abs, table)
+
+i=table(m_c5[v_c7,6])
+round(100*i/sum(i),2)# 与d_c7stat[,2]一致
+
+choose(48,5)
+
+
+133784560/1712304
+choose(52,7)/choose(48,5)
+
+k=0
+for(i in 1:1325)
+  for(j in (i+1):1326)
+    k=k+1
+
+choose(1326,2)
 
 
 

@@ -7,6 +7,16 @@ match_mc5=function(id){
         sum(m_c5id[i[5]:j[5],5]))[flag])+1
 }
 
+# match_mc7 ---------------------------------------------------------------
+match_mc7=function(id){
+  i=id-1;flag=(c(1,id[1:6]+1)<=i)
+  
+  sum(c(ifelse(i[1]==0,0,m_c7idcum[i[1],1]),m_c7idcum[i[2],2]-m_c7idcum[id[1],2],
+        m_c7idcum[i[3],3]-m_c7idcum[id[2],3],m_c7idcum[i[4],4]-m_c7idcum[id[3],4],
+        m_c7idcum[i[5],5]-m_c7idcum[id[4],5],m_c7idcum[i[6],6]-m_c7idcum[id[5],6],
+        m_c7idcum[i[7],7]-m_c7idcum[id[6],7])[flag])+1
+}
+
 # seq5in7-20180311 快6.1倍，6.1w/s-----------------------------------------
 pface=rep(1:13,each=4)
 psuit=rep(1:4,13)
@@ -326,3 +336,17 @@ seq5in7=function(v7){
 #   for(j in 1:1000000)
 #     seq5in7_test(k[1:2],k[3:7])
 # })
+
+# a_7type=array(0L,dim=c(48,52,52,52,52,52,52))
+a_7rank=array(NA,dim=c(48,52,52,52,52))
+n=1
+for(i in 1:48)
+  for(j in (i+1):49)
+    for(k in (j+1):50)
+      for(l in (k+1):51)
+        for(m in (l+1):52){
+          # a_7type[i,j,k,l,m]=m_c5[n,6]
+          a_7rank[i,j,k,l,m]=m_c5[n,7]
+          n=n+1
+        }
+
